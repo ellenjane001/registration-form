@@ -42,8 +42,16 @@ export default function Home() {
     validationSchema: RegistrationSchema,
     onSubmit: values => {
       alert(JSON.stringify(values, null, 2));
-      const fetchAPI = async (fn: fetchFunction) => {
-        console.log(values)
+      const fetchAPI = async (values: {
+        username: string,
+        password: string,
+        confirm_password: string,
+        first_name: string,
+        middle_name: string,
+        last_name: string,
+        email: string,
+        number: string
+      }) => {
         fetch('https://jsonplaceholder.typicode.com/posts', {
           method: 'POST',
           body: JSON.stringify(
@@ -72,7 +80,7 @@ export default function Home() {
       <main className={styles.main}>
         <Paper elevation={3} sx={{ padding: '20px' }}>
           <Grid container>
-            <Title className={inter.className}/>
+            <Title className={inter.className} />
             <form onSubmit={formik.handleSubmit} >
               <Grid container alignItems="center" justifyContent="center" sx={{ padding: '10px' }} spacing={2}>
                 {/* firstname */}
