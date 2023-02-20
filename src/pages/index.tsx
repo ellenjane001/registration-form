@@ -17,16 +17,6 @@ const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  type fetchFunction = (values: {
-    username: string,
-    password: string,
-    confirm_password: string,
-    first_name: string,
-    middle_name: string,
-    last_name: string,
-    email: string,
-    number: string
-  }) => void
   const [showPassword, setShowPassword] = useState(false)
   const formik = useFormik({
     initialValues: {
