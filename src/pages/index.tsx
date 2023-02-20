@@ -81,6 +81,7 @@ export default function Home() {
             </Grid>
             <form onSubmit={formik.handleSubmit} >
               <Grid container alignItems="center" justifyContent="center" sx={{ padding: '10px' }} spacing={2}>
+                {/* firstname */}
                 <Grid item md={4}>
                   <FormControl fullWidth>
                     <FormItem name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} label="First Name" />
@@ -89,6 +90,7 @@ export default function Home() {
                     ) : null}
                   </FormControl>
                 </Grid>
+                {/* middle name */}
                 <Grid item md={4}>
                   <FormControl fullWidth>
                     <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)" />
@@ -97,6 +99,7 @@ export default function Home() {
                     ) : null}
                   </FormControl>
                 </Grid>
+                {/* last name */}
                 <Grid item md={4}>
                   <FormControl fullWidth>
                     <FormItem name='last_name' value={formik.values.last_name} handleChange={formik.handleChange} label="Last Name" />
@@ -105,6 +108,7 @@ export default function Home() {
                     ) : null}
                   </FormControl>
                 </Grid>
+                {/* email address */}
                 <Grid item md={12}>
                   <FormControl fullWidth>
                     <FormItem name='email' value={formik.values.email} handleChange={formik.handleChange} label="Email Address" />
@@ -113,6 +117,7 @@ export default function Home() {
                     ) : null}
                   </FormControl>
                 </Grid>
+                {/* mobile number */}
                 <Grid item md={12}>
                   <FormControl fullWidth>
                     <FormItem name='number' value={formik.values.number} handleChange={formik.handleChange} label="Mobile Number" />
@@ -121,6 +126,7 @@ export default function Home() {
                     ) : null}
                   </FormControl>
                 </Grid>
+                {/* username */}
                 <Grid item md={12}>
                   <FormControl fullWidth>
                     <FormItem name='username' value={formik.values.username} handleChange={formik.handleChange} label="Username" />
@@ -129,6 +135,7 @@ export default function Home() {
                     ) : null}
                   </FormControl>
                 </Grid>
+                {/* password */}
                 <Grid item md={6}>
                   <Grid container direction="column" spacing={2}>
                     <Grid item md={6}>
@@ -151,6 +158,7 @@ export default function Home() {
                         ) : null}
                       </FormControl>
                     </Grid>
+                    {/* Confirm password */}
                     <Grid item md={6}>
                       <FormControl fullWidth>
                         <InputLabel htmlFor="confirm_password">Confirm Password</InputLabel>
@@ -173,8 +181,9 @@ export default function Home() {
                     </Grid>
                   </Grid>
                 </Grid>
+                {/* password checklist */}
                 <Grid item md={6}>
-                  <PasswordChecklist
+                  <PasswordChecklist style={{fontFamily:'Helvetica'}}
                     rules={["minLength", "maxLength", "specialChar", "number", "capital", "match"]}
                     value={formik.values.password}
                     minLength={6}
@@ -182,6 +191,7 @@ export default function Home() {
                     valueAgain={formik.values.confirm_password}
                   />
                 </Grid>
+                {/* buttons */}
                 <Grid item md={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
                   <ButtonGroup>
                     <Button variant='contained' color="warning" type='button' onClick={e => formik.resetForm()}>Clear</Button>
