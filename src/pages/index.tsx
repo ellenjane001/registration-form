@@ -183,8 +183,8 @@ export default function Home() {
                 </Grid>
                 {/* password checklist */}
                 <Grid item md={6}>
-                  <PasswordChecklist style={{fontFamily:'Helvetica'}}
-                    rules={["minLength", "maxLength", "specialChar", "number", "capital", "match"]}
+                  <PasswordChecklist style={{ fontFamily: 'Helvetica' }}
+                    rules={["maxLength", "minLength", "specialChar", "number", "capital", "match"]}
                     value={formik.values.password}
                     minLength={6}
                     maxLength={15}
