@@ -1,20 +1,23 @@
 import { RegistrationSchema } from '@/schema'
-import { useFormik } from 'formik'
-import { useState } from 'react'
-import { Inter } from '@next/font/google'
-import dynamic from 'next/dynamic'
-import FormItem from '../FormItem/FormItem'
-import { Paper, Grid, FormControl, InputAdornment, FormHelperText, IconButton, InputLabel, OutlinedInput, ButtonGroup, Button } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Stack, Button, ButtonGroup, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography } from '@mui/material'
+import { Inter } from '@next/font/google'
+import { useFormik } from 'formik'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import FormItem from '../FormItem/FormItem'
+import Title from '../Title/Title'
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
 });
 
 const inter = Inter({ subsets: ['latin'] })
 
-import Title from '../Title/Title'
+
 const Registration = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -60,7 +63,9 @@ const Registration = () => {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
-
+  const handleClickChangeToLogin = () => {
+    router.push('./login')
+  }
   return (
     <>
       <Paper elevation={3} sx={{ padding: '20px' }}>
@@ -69,7 +74,7 @@ const Registration = () => {
           <form onSubmit={formik.handleSubmit} >
             <Grid container alignItems="center" justifyContent="center" sx={{ padding: '10px' }} spacing={2}>
               {/* firstname */}
-              <Grid item md={4}>
+              <Grid item md={4} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} label="First Name" />
                   {formik.touched.first_name && formik.errors.first_name ? (
@@ -78,7 +83,7 @@ const Registration = () => {
                 </FormControl>
               </Grid>
               {/* middle name */}
-              <Grid item md={4}>
+              <Grid item md={4} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)" />
                   {formik.touched.middle_name && formik.errors.middle_name ? (
@@ -87,7 +92,7 @@ const Registration = () => {
                 </FormControl>
               </Grid>
               {/* last name */}
-              <Grid item md={4}>
+              <Grid item md={4} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='last_name' value={formik.values.last_name} handleChange={formik.handleChange} label="Last Name" />
                   {formik.touched.last_name && formik.errors.last_name ? (
@@ -96,7 +101,7 @@ const Registration = () => {
                 </FormControl>
               </Grid>
               {/* email address */}
-              <Grid item md={12}>
+              <Grid item md={12} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='email' value={formik.values.email} handleChange={formik.handleChange} label="Email Address" />
                   {formik.touched.email && formik.errors.email ? (
@@ -105,7 +110,7 @@ const Registration = () => {
                 </FormControl>
               </Grid>
               {/* mobile number */}
-              <Grid item md={12}>
+              <Grid item md={12} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='number' value={formik.values.number} handleChange={formik.handleChange} label="Mobile Number" />
                   {formik.touched.number && formik.errors.number ? (
@@ -114,7 +119,7 @@ const Registration = () => {
                 </FormControl>
               </Grid>
               {/* username */}
-              <Grid item md={12}>
+              <Grid item md={12} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='username' value={formik.values.username} handleChange={formik.handleChange} label="Username" />
                   {formik.touched.username && formik.errors.username ? (
@@ -123,7 +128,7 @@ const Registration = () => {
                 </FormControl>
               </Grid>
               {/* password */}
-              <Grid item md={6}>
+              <Grid item md={6} xs={12}>
                 <Grid container direction="column" spacing={2}>
                   <Grid item md={6}>
                     <FormControl fullWidth>
@@ -179,11 +184,23 @@ const Registration = () => {
                 />
               </Grid>
               {/* buttons */}
-              <Grid item md={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <ButtonGroup>
-                  <Button variant='contained' color="warning" type='button' onClick={e => formik.resetForm()}>Clear</Button>
-                  <Button variant='contained' color="primary" type='submit'>Register</Button>
-                </ButtonGroup>
+              <Grid item md={12}>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item md={6} xs={12} >
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Typography variant="subtitle2" className={inter.className}>
+                        Already have an account?
+                      </Typography>
+                      <Link component="button" className={inter.className} type='button' onClick={handleClickChangeToLogin}>Login</Link>
+                    </Stack>
+                  </Grid>
+                  <Grid item md={6} xs={12} sx={{display:'flex',justifyContent:'flex-end'}}>
+                    <ButtonGroup>
+                      <Button variant='contained' color="warning" type='button' onClick={e => formik.resetForm()}>Clear</Button>
+                      <Button variant='contained' color="primary" type='submit'>Register</Button>
+                    </ButtonGroup>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </form>
