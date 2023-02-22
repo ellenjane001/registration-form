@@ -1,7 +1,8 @@
-import React from 'react'
-import Header from './Components/Header/Header'
 import styles from '@/styles/Profile.module.css'
+import Header from './Components/Header/Header'
+
 const profile = () => {
+ 
   return (
     <>
       <Header />

@@ -37,7 +37,7 @@ const login = () => {
             //   }
             //   fetchAPI(values)
             formik.resetForm()
-            router.push('./profile')
+            router.push('./profile/1')
         },
     })
 

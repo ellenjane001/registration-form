@@ -1,13 +1,15 @@
 import { create } from 'zustand'
 
 interface AppState {
-    auth: boolean
-    setAuth: () => void,
+    auth: {
+        isLoggedIn: boolean
+    }
+    setAuth: (val: { isLoggedIn: boolean }) => void,
 }
 
 const useAppStore = create<AppState>()((set) => ({
-    auth: false,
-    setAuth: () => set(state => ({ auth: !state.auth }))
+    auth: { isLoggedIn: false },
+    setAuth: (val) => set(state => ({ auth: { isLoggedIn: val.isLoggedIn } }))
 }))
 
 
