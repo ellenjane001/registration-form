@@ -1,63 +1,69 @@
 import { RegistrationSchema } from '@/schema'
+import { RegistrationType } from '@/types'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Stack, Button, ButtonGroup, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Typography } from '@mui/material'
+import { Button, ButtonGroup, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
+import axios from 'axios'
 import { useFormik } from 'formik'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import Swal from 'sweetalert2'
+import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
 import Title from '../Title/Title'
+
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
 });
 
 const inter = Inter({ subsets: ['latin'] })
 
-
 const Registration = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const initialValues = {
+    username: '',
+    password: '',
+    confirm_password: '',
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    email: '',
+    number: ''
+  }
+
   const router = useRouter()
   const formik = useFormik({
-    initialValues: {
-      username: '',
-      password: '',
-      confirm_password: '',
-      first_name: '',
-      middle_name: '',
-      last_name: '',
-      email: '',
-      number: ''
-    },
+    initialValues: initialValues,
     validationSchema: RegistrationSchema,
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
-      const fetchAPI = async (values: {
-        username: string,
-        password: string,
-        confirm_password: string,
-        first_name: string,
-        middle_name: string,
-        last_name: string,
-        email: string,
-        number: string
-      }) => {
-        fetch('https://jsonplaceholder.typicode.com/posts', {
-          method: 'POST',
-          body: JSON.stringify(
-            values
-          ),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
-        })
-          .then((response) => response.json())
-          .then((json) => console.log(json));
+      const fetchAPI = async (values: RegistrationType) => {
+        try {
+          axios.post('api/users/register', { ...values }).then((response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Congratulations',
+                text: 'User has been successfully registered',
+                showConfirmButton: false,
+                timer: 1500
+              })
+              formik.resetForm()
+            }
+          });
+        } catch (e) {
+          console.error(e)
+        }
       }
       fetchAPI(values)
-      formik.resetForm()
     },
   })
+  const items = [
+    { name: 'last_name', value: formik.values.last_name, handleChangeFormik: formik.handleChange, label: 'Last Name', error: formik.errors.last_name, touched: formik.touched.last_name },
+    { name: 'email', value: formik.values.email, handleChangeFormik: formik.handleChange, label: 'Email Address', error: formik.errors.email, touched: formik.touched.email },
+    { name: 'number', value: formik.values.number, handleChangeFormik: formik.handleChange, label: 'Mobile Number', error: formik.errors.number, touched: formik.touched.number },
+    { name: 'username', value: formik.values.username, handleChangeFormik: formik.handleChange, label: 'Username', error: formik.errors.username, touched: formik.touched.username }
+  ]
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,56 +83,24 @@ const Registration = () => {
               <Grid item md={4} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} label="First Name" />
-                  {formik.touched.first_name && formik.errors.first_name ? (
-                    <FormHelperText error>{formik.errors.first_name}</FormHelperText>
-                  ) : null}
+                  <Error message={formik.errors.first_name} checker={formik.touched.first_name && formik.errors.first_name} />
                 </FormControl>
               </Grid>
               {/* middle name */}
               <Grid item md={4} xs={12}>
                 <FormControl fullWidth>
                   <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)" />
-                  {formik.touched.middle_name && formik.errors.middle_name ? (
-                    <FormHelperText error>{formik.errors.middle_name}</FormHelperText>
-                  ) : null}
                 </FormControl>
               </Grid>
-              {/* last name */}
-              <Grid item md={4} xs={12}>
-                <FormControl fullWidth>
-                  <FormItem name='last_name' value={formik.values.last_name} handleChange={formik.handleChange} label="Last Name" />
-                  {formik.touched.last_name && formik.errors.last_name ? (
-                    <FormHelperText error>{formik.errors.last_name}</FormHelperText>
-                  ) : null}
-                </FormControl>
-              </Grid>
-              {/* email address */}
-              <Grid item md={12} xs={12}>
-                <FormControl fullWidth>
-                  <FormItem name='email' value={formik.values.email} handleChange={formik.handleChange} label="Email Address" />
-                  {formik.touched.email && formik.errors.email ? (
-                    <FormHelperText error>{formik.errors.email}</FormHelperText>
-                  ) : null}
-                </FormControl>
-              </Grid>
-              {/* mobile number */}
-              <Grid item md={12} xs={12}>
-                <FormControl fullWidth>
-                  <FormItem name='number' value={formik.values.number} handleChange={formik.handleChange} label="Mobile Number" />
-                  {formik.touched.number && formik.errors.number ? (
-                    <FormHelperText error>{formik.errors.number}</FormHelperText>
-                  ) : null}
-                </FormControl>
-              </Grid>
-              {/* username */}
-              <Grid item md={12} xs={12}>
-                <FormControl fullWidth>
-                  <FormItem name='username' value={formik.values.username} handleChange={formik.handleChange} label="Username" />
-                  {formik.touched.username && formik.errors.username ? (
-                    <FormHelperText error>{formik.errors.username}</FormHelperText>
-                  ) : null}
-                </FormControl>
-              </Grid>
+              {items.map((item, i) => {
+                const { name, value, handleChangeFormik, label, error, touched } = item
+                return (<Grid item md={4} xs={12} key={i}>
+                  <FormControl fullWidth>
+                    <FormItem name={name} value={value} handleChange={handleChangeFormik} label={label} />
+                    <Error message={error} checker={touched && error} />
+                  </FormControl>
+                </Grid>)
+              })}
               {/* password */}
               <Grid item md={6} xs={12}>
                 <Grid container direction="column" spacing={2}>
@@ -145,9 +119,7 @@ const Registration = () => {
                           </IconButton>
                         </InputAdornment>
                       } />
-                      {formik.touched.password && formik.errors.password ? (
-                        <FormHelperText error>{formik.errors.password}</FormHelperText>
-                      ) : null}
+                      <Error message={formik.errors.password} checker={formik.touched.password && formik.errors.password} />
                     </FormControl>
                   </Grid>
                   {/* Confirm password */}
@@ -166,9 +138,7 @@ const Registration = () => {
                           </IconButton>
                         </InputAdornment>
                       } />
-                      {formik.touched.confirm_password && formik.errors.confirm_password ? (
-                        <FormHelperText error>{formik.errors.confirm_password}</FormHelperText>
-                      ) : null}
+                      <Error message={formik.errors.confirm_password} checker={formik.touched.confirm_password && formik.errors.confirm_password} />
                     </FormControl>
                   </Grid>
                 </Grid>
@@ -194,7 +164,7 @@ const Registration = () => {
                       <Link component="button" className={inter.className} type='button' onClick={handleClickChangeToLogin}>Login</Link>
                     </Stack>
                   </Grid>
-                  <Grid item md={6} xs={12} sx={{display:'flex',justifyContent:'flex-end'}}>
+                  <Grid item md={6} xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <ButtonGroup>
                       <Button variant='contained' color="warning" type='button' onClick={e => formik.resetForm()}>Clear</Button>
                       <Button variant='contained' color="primary" type='submit'>Register</Button>

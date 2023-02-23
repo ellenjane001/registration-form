@@ -1,13 +1,17 @@
+import { LoginSchema } from '@/schema'
 import styles from '@/styles/Login.module.css'
+import { LoginType } from '@/types'
 import { Home, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack, Typography } from '@mui/material'
+import { Inter } from '@next/font/google'
+import axios from 'axios'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import * as Yup from 'yup'
+import Error from './Components/Error/Error'
+import FormItem from './Components/FormItem/FormItem'
 import Header from './Components/Header/Header'
-import { Inter } from '@next/font/google'
-
+import SignIn from './Components/Login/SignIn/SignIn'
 const inter = Inter({ subsets: ['latin'] })
 
 
@@ -20,24 +24,23 @@ const login = () => {
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
-    const validationSchema = Yup.object().shape({
-        username: Yup.string(),
-        password: Yup.string()
-    })
+
     const formik = useFormik({
         initialValues: {
             username: '',
             password: ''
         },
-        validationSchema: validationSchema,
+        validationSchema: LoginSchema,
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-            //   const fetchAPI = async (values) => {
-
-            //   }
-            //   fetchAPI(values)
-            formik.resetForm()
-            router.push('./profile/1')
+            // alert(JSON.stringify(values, null, 2));
+            const fetchAPI = async (values: LoginType) => {
+                console.log(values)
+                let response = await axios.get('/api/users/login')
+                console.log(response)
+            }
+            fetchAPI(values)
+            // formik.resetForm()
+            // router.push('./profile/1')
         },
     })
 
@@ -45,7 +48,7 @@ const login = () => {
     const handleClickDisplayRegister = () => {
         router.push('./registration')
     }
-    const handleClickReturnHome=()=>{
+    const handleClickReturnHome = () => {
         router.push('./')
     }
     return (
@@ -59,16 +62,14 @@ const login = () => {
                                 <Home />
                             </IconButton>
                         </Grid>
-                        <Grid item>
-                            <h1 className={inter.className} style={{ textAlign: "center" }}>Sign in</h1>
-                        </Grid>
+                        <SignIn />
                         <Grid item sx={{ textAlign: 'center' }} md={12}>
                             <form onSubmit={formik.handleSubmit} style={{ padding: "10px" }}>
                                 <Grid container direction="column" spacing={1}>
                                     <Grid item>
                                         <FormControl fullWidth>
-                                            <InputLabel htmlFor="username">Username</InputLabel>
-                                            <OutlinedInput id='username' name="username" label="Username" onChange={formik.handleChange} />
+                                            <FormItem name="username" handleChange={formik.handleChange} value={formik.values.username} label="Username"></FormItem>
+                                            <Error message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
                                         </FormControl>
                                     </Grid>
                                     <Grid item>
@@ -86,6 +87,7 @@ const login = () => {
                                                     </IconButton>
                                                 </InputAdornment>
                                             } />
+                                            <Error message={formik.errors.password} checker={formik.touched.password && formik.errors.password} />
                                         </FormControl>
                                     </Grid>
                                 </Grid>
@@ -100,12 +102,8 @@ const login = () => {
                                 <Button variant='contained' color='primary' type="submit">Login</Button>
                             </form>
                         </Grid>
-
-
                     </Grid>
-
                 </Paper>
-
             </main>
         </>
     )

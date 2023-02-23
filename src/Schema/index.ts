@@ -13,3 +13,8 @@ export const RegistrationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email address').required('Required'),
   number: Yup.string().matches(phoneRegExp, 'Phone number is not valid').required('Required'),
 })
+
+export const LoginSchema = Yup.object().shape({
+  username: Yup.string().max(10, 'Must be less than 10 characters').min(4, 'Must be atleast 4 characters').required('Required'),
+  password: Yup.string().required('Required')
+})
