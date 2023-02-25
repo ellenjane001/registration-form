@@ -10,7 +10,7 @@ const Profile = () => {
     
     useEffect(() => {
         authContext.isUserAuthenticated()
-            ? router.push("/dashboard")
+            ? router.push("/profile/1")
             : router.push("/");
     }, [])
     return (<>

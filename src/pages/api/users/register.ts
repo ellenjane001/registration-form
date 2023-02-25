@@ -1,27 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient } from '@prisma/client'
-import { CreateUserType } from '@/types'
+import { serialize } from "cookie";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-const prisma = new PrismaClient()
-
-const createUser = async (values: CreateUserType) => {
-  const { username, first_name, middle_name, last_name, email, number, password } = values
-  const newUser = await prisma.users.create({
-    data: {
-      first_name,
-      middle_name,
-      last_name,
-      email_address: email,
-      mobile_number: parseInt(number),
-      username,
-      password
-    },
-  })
-
-  return newUser
-}
 type Data = {
-  user_id: number
+
 }
 
 export default function handler(
@@ -29,11 +10,11 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
 
-  createUser(req.body).then(response => {
-    if (response.user_id) {
-      res.status(200).json({ user_id: response.user_id })
-    }
-    else
-      res.status(400)
-  })
+  delete req.body.confirm_password
+  const cookie = serialize("registration", JSON.stringify(req.body), {
+    httpOnly: true,
+    path: "/",
+  });
+  res.setHeader("Set-Cookie", cookie);
+  res.status(200).json({ message: "Successfully set cookie!" });
 }

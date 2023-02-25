@@ -1,3 +1,4 @@
+import { AuthContext } from '@/context/auth-context'
 import { LoginSchema } from '@/schema'
 import styles from '@/styles/Login.module.css'
 import { LoginType } from '@/types'
@@ -7,7 +8,7 @@ import { Inter } from '@next/font/google'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Error from './Components/Error/Error'
 import FormItem from './Components/FormItem/FormItem'
 import Header from './Components/Header/Header'
@@ -17,7 +18,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 const login = () => {
     const router = useRouter()
-
+    const authContext = useContext(AuthContext)
     const [showPassword, setShowPassword] = useState(false)
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -34,13 +35,29 @@ const login = () => {
         onSubmit: values => {
             // alert(JSON.stringify(values, null, 2));
             const fetchAPI = async (values: LoginType) => {
-                console.log(values)
-                let response = await axios.get('/api/users/login')
-                console.log(response)
+                try {
+                    axios.post('api/users/login', { ...values }).then((response) => {
+                        if (response.status === 200) {
+                            console.log(response)
+                            authContext.setAuthState({ data: { ...response, data: false} })
+                            router.push('./profile/1')
+
+                            // Swal.fire({
+                            //   icon: 'success',
+                            //   title: 'Congratulations',
+                            //   text: 'User has been successfully registered',
+                            //   showConfirmButton: false,
+                            //   timer: 1500
+                            // })
+                            // formik.resetForm()
+                        }
+                    });
+                } catch (e) {
+                    console.error(e)
+                }
             }
             fetchAPI(values)
             // formik.resetForm()
-            // router.push('./profile/1')
         },
     })
 

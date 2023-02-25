@@ -41,14 +41,15 @@ const Registration = () => {
         try {
           axios.post('api/users/register', { ...values }).then((response) => {
             if (response.status === 200) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Congratulations',
-                text: 'User has been successfully registered',
-                showConfirmButton: false,
-                timer: 1500
-              })
-              formik.resetForm()
+              console.log(response)
+              // Swal.fire({
+              //   icon: 'success',
+              //   title: 'Congratulations',
+              //   text: 'User has been successfully registered',
+              //   showConfirmButton: false,
+              //   timer: 1500
+              // })
+              // formik.resetForm()
             }
           });
         } catch (e) {

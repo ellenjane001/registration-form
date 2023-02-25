@@ -1,33 +1,26 @@
-import { LoginType } from '@/types';
-import { PrismaClient } from '@prisma/client';
+import cookie from 'cookie';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-const prisma = new PrismaClient();
-
-const loginUser = async (values: LoginType) => {
-  const user = await prisma.users.findFirst({
-    where: {
-      email_address: 'emma@prisma.io',
-    },
-    select: {
-      email_address: true,
-      username: true,
-    },
-  })
-  return user
-}
-
 type Data = {
-  email_address?: string | undefined
-  username?: string | undefined
+  message?: string
+  username?: string
+  e?: unknown
+  password?: string
 }
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  loginUser(req.body).then(response => {
-    res.status(200).json({ ...response })
-
-  })
+  try {
+    const { registration } = cookie.parse(req.headers.cookie)
+    const { username, password } = JSON.parse(registration)
+    const bodyUsername = req.body.username
+    const bodyPassword = req.body.password
+    if (bodyUsername === username && bodyPassword === password)
+      return res.status(200).json({ message: 'logged in', username, password })
+    else
+      throw 'Account not found'
+  } catch (e) {
+    return res.status(400).json({ e })
+  }
 }
