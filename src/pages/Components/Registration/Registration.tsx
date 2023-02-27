@@ -5,6 +5,7 @@ import { Button, ButtonGroup, FormControl, Grid, IconButton, InputAdornment, Inp
 import { Inter } from '@next/font/google'
 import axios from 'axios'
 import { useFormik } from 'formik'
+import { signIn } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -71,7 +72,7 @@ const Registration = () => {
     event.preventDefault();
   };
   const handleClickChangeToLogin = () => {
-    router.push('./login')
+    signIn()
   }
   return (
     <>

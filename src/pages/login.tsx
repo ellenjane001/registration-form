@@ -1,4 +1,3 @@
-import { AuthContext } from '@/context/auth-context'
 import { LoginSchema } from '@/schema'
 import styles from '@/styles/Login.module.css'
 import { LoginType } from '@/types'
@@ -7,18 +6,19 @@ import { Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link
 import { Inter } from '@next/font/google'
 import axios from 'axios'
 import { useFormik } from 'formik'
+import type { InferGetServerSidePropsType, GetServerSidePropsContext } from "next"
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Error from './Components/Error/Error'
 import FormItem from './Components/FormItem/FormItem'
 import Header from './Components/Header/Header'
 import SignIn from './Components/Login/SignIn/SignIn'
+import { getCsrfToken } from "next-auth/react"
 const inter = Inter({ subsets: ['latin'] })
 
-
-const login = () => {
+const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const router = useRouter()
-    const authContext = useContext(AuthContext)
     const [showPassword, setShowPassword] = useState(false)
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -33,30 +33,30 @@ const login = () => {
         },
         validationSchema: LoginSchema,
         onSubmit: values => {
+            signIn('credentials', { values })
             // alert(JSON.stringify(values, null, 2));
-            const fetchAPI = async (values: LoginType) => {
-                try {
-                    axios.post('api/users/login', { ...values }).then((response) => {
-                        if (response.status === 200) {
-                            console.log(response)
-                            authContext.setAuthState({ data: { ...response, data: false} })
-                            router.push('./profile/1')
+            // const fetchAPI = async (values: LoginType) => {
+            //     try {
+            //         axios.post('api/users/login', { ...values }).then((response) => {
+            //             if (response.status === 200) {
+            //                 console.log(response)
+            //                 // router.push('./profile/1')
 
-                            // Swal.fire({
-                            //   icon: 'success',
-                            //   title: 'Congratulations',
-                            //   text: 'User has been successfully registered',
-                            //   showConfirmButton: false,
-                            //   timer: 1500
-                            // })
-                            // formik.resetForm()
-                        }
-                    });
-                } catch (e) {
-                    console.error(e)
-                }
-            }
-            fetchAPI(values)
+            //                 // Swal.fire({
+            //                 //   icon: 'success',
+            //                 //   title: 'Congratulations',
+            //                 //   text: 'User has been successfully registered',
+            //                 //   showConfirmButton: false,
+            //                 //   timer: 1500
+            //                 // })
+            //                 // formik.resetForm()
+            //             }
+            //         });
+            //     } catch (e) {
+            //         console.error(e)
+            //     }
+            // }
+            // fetchAPI(values)
             // formik.resetForm()
         },
     })
@@ -81,7 +81,8 @@ const login = () => {
                         </Grid>
                         <SignIn />
                         <Grid item sx={{ textAlign: 'center' }} md={12}>
-                            <form onSubmit={formik.handleSubmit} style={{ padding: "10px" }}>
+                            <form onSubmit={formik.handleSubmit} style={{ padding: "10px" }} action="/api/auth/callback/credentials">
+                                <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
                                 <Grid container direction="column" spacing={1}>
                                     <Grid item>
                                         <FormControl fullWidth>
@@ -116,8 +117,15 @@ const login = () => {
                                         Register
                                     </Link>
                                 </Stack>
+
                                 <Button variant='contained' color='primary' type="submit">Login</Button>
                             </form>
+
+                        </Grid>
+                        <Grid item sx={{ textAlign: 'center' }}>
+                            <Button variant="contained" color="inherit" onClick={() => signIn("google", {
+                                callbackUrl: `${window.location.origin}/profile/1`,
+                            })}>Sign in with Google</Button>
                         </Grid>
                     </Grid>
                 </Paper>
@@ -127,3 +135,11 @@ const login = () => {
 }
 
 export default login
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    return {
+        props: {
+            csrfToken: await getCsrfToken(context),
+        },
+    }
+}
