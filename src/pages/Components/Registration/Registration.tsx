@@ -13,6 +13,9 @@ import Swal from 'sweetalert2'
 import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
 import Title from '../Title/Title'
+import { Home } from '@mui/icons-material'
+import ReturnToHomeBtn from '../ReturnToHomeBtn/ReturnToHomeBtn'
+import LoginAndRegHeader from '../LoginAndRegHeader/LoginAndRegHeader'
 
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
@@ -43,14 +46,15 @@ const Registration = () => {
           axios.post('api/users/register', { ...values }).then((response) => {
             if (response.status === 200) {
               console.log(response)
-              // Swal.fire({
-              //   icon: 'success',
-              //   title: 'Congratulations',
-              //   text: 'User has been successfully registered',
-              //   showConfirmButton: false,
-              //   timer: 1500
-              // })
-              // formik.resetForm()
+              Swal.fire({
+                icon: 'success',
+                title: 'Congratulations',
+                text: 'User has been successfully registered',
+                showConfirmButton: false,
+                timer: 1500
+              })
+              formik.resetForm()
+              router.push('/')
             }
           });
         } catch (e) {
@@ -78,7 +82,7 @@ const Registration = () => {
     <>
       <Paper elevation={3} sx={{ padding: '20px' }}>
         <Grid container>
-          <Title className={inter.className} />
+          <LoginAndRegHeader text="Registration Form"/>
           <form onSubmit={formik.handleSubmit} >
             <Grid container alignItems="center" justifyContent="center" sx={{ padding: '10px' }} spacing={2}>
               {/* firstname */}

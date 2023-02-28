@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 const contact = () => {
   return (
     <>
-      <Header />
+      <Header title='Contact' />
       <main className={styles.main}>
         <Paper sx={{ padding: '2rem' }} elevation={0}>
           <Grid container direction="column" spacing={2}>

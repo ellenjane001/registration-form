@@ -1,16 +1,35 @@
 import Header from './Components/Header/Header'
 import Registration from './Components/Registration/Registration'
 import styles from '@/styles/Registration.module.css'
+import { getSession } from 'next-auth/react'
+import { GetServerSidePropsContext } from 'next'
+
 const registration = () => {
   return (
     <>
-      <Header />
+      <Header title='Registration' />
       <main className={styles.main}>
         <Registration />
       </main>
     </>
-
   )
 }
 
 export default registration
+
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+  if (session) {
+    return {
+      redirect: {
+        destination: '/profile/1',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session }
+  }
+}

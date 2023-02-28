@@ -1,46 +1,75 @@
-import { useEffect } from 'react'
-import { useSession, signIn, signOut } from 'next-auth/react'
-import { useState } from 'react'
-import { Button } from '@mui/material'
-import { useRouter } from 'next/router'
+import Logo from '@/assets/logo.jpg'
+import styles from '@/styles/Profile.module.css'
+import { Avatar, Button, Grid, Paper } from '@mui/material'
+import { Inter } from '@next/font/google'
+import { GetServerSidePropsContext } from 'next'
+import { getSession, signOut, useSession } from 'next-auth/react'
+import Image from 'next/image'
+import Swal from 'sweetalert2'
+import Header from '../Components/Header/Header'
+import Navigation from '../Components/Navigation/Navigation'
+
+const inter = Inter({ subsets: ['latin'] })
 
 const Profile = () => {
     const { data: session } = useSession()
-    const [content, setContent] = useState()
-    const router = useRouter()
-    // Fetch content from protected route
-    useEffect(() => {
-        const fetchData = async () => {
-            const res = await fetch("/api/examples/protected")
-            const json = await res.json()
-            if (json.content) {
-                setContent(json.content)
+    const handleClickLogout = () => {
+        Swal.fire({
+            title: 'Logout',
+            text: 'Do you want to logout?',
+            icon: 'question',
+            showConfirmButton: true,
+        }).then(confirm => {
+            if (confirm) {
+                signOut({
+                    callbackUrl: `${window.location.origin}/login`
+                })
             }
-        }
-        fetchData()
-    }, [session])
-
-
-    // If no session exists, display access denied message
-    if (!session) {
-        console.log(session)
-        // router.push('./')
-        // return (
-        //     <h1>Access denied <button type="button" onClick={(e) => signIn()}>Sign In</button></h1>
-        // )
+        })
     }
-
-    // If session exists, display content
-    return (
-        <>
-            <h1>Protected Page</h1>
-            <p>
-                <strong>{content ?? "\u00a0"}</strong>
-            </p>
-            {!session && <Button variant='contained' onClick={(e) => signOut()}>Logout</Button>}
-
-        </>
-    )
+    if (session) {
+        return (
+            <>
+                <Header />
+                <main className={styles.main}>
+                    <Paper sx={{ padding: '30px' }} elevation={0}>
+                        <Grid container direction="column" alignItems="center" spacing={3}>
+                            <Navigation active="profile" />
+                            <Grid item md={12}>
+                                <h1 className={inter.className}>Welcome {session && session.user?.name}</h1>
+                            </Grid>
+                            <Grid item>
+                                <Avatar src={session.user?.image !== null ? session.user?.image : ''} sx={{ width: 56, height: 56 }} />
+                            </Grid>
+                            <Grid item>
+                                <p className={inter.className}>You can view this page because you are signed in.</p>
+                            </Grid>
+                            <Grid item>
+                                <Button variant='contained' onClick={handleClickLogout}>Logout</Button>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                </main>
+            </>
+        )
+    }
+    return <main className={styles.main}>Access Denied</main>
 }
 
 export default Profile
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const session = await getSession(context)
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: { session }
+    }
+}

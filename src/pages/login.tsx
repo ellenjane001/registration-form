@@ -1,20 +1,19 @@
 import { LoginSchema } from '@/schema'
 import styles from '@/styles/Login.module.css'
-import { LoginType } from '@/types'
-import { Home, Visibility, VisibilityOff } from '@mui/icons-material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import type { InferGetServerSidePropsType, GetServerSidePropsContext } from "next"
-import { signIn } from 'next-auth/react'
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next"
+import { getCsrfToken, getSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import GoogleButton from 'react-google-button'
 import Error from './Components/Error/Error'
 import FormItem from './Components/FormItem/FormItem'
 import Header from './Components/Header/Header'
-import SignIn from './Components/Login/SignIn/SignIn'
-import { getCsrfToken } from "next-auth/react"
+import LoginAndRegHeader from './Components/LoginAndRegHeader/LoginAndRegHeader'
 const inter = Inter({ subsets: ['latin'] })
 
 const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -33,31 +32,17 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
         },
         validationSchema: LoginSchema,
         onSubmit: values => {
-            signIn('credentials', { values })
-            // alert(JSON.stringify(values, null, 2));
-            // const fetchAPI = async (values: LoginType) => {
-            //     try {
-            //         axios.post('api/users/login', { ...values }).then((response) => {
-            //             if (response.status === 200) {
-            //                 console.log(response)
-            //                 // router.push('./profile/1')
-
-            //                 // Swal.fire({
-            //                 //   icon: 'success',
-            //                 //   title: 'Congratulations',
-            //                 //   text: 'User has been successfully registered',
-            //                 //   showConfirmButton: false,
-            //                 //   timer: 1500
-            //                 // })
-            //                 // formik.resetForm()
-            //             }
-            //         });
-            //     } catch (e) {
-            //         console.error(e)
-            //     }
-            // }
-            // fetchAPI(values)
-            // formik.resetForm()
+            const login = async (values: { username: string, password: string }) => {
+                let response = await signIn('credentials', { ...values, redirect: false })
+                if (response!.ok) {
+                    router.push("/profile/1")
+                    formik.resetForm()
+                } else {
+                    // axios.post('/api/users/failed-login',)
+                    console.log(response!.error)
+                }
+            }
+            login(values)
         },
     })
 
@@ -65,21 +50,14 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
     const handleClickDisplayRegister = () => {
         router.push('./registration')
     }
-    const handleClickReturnHome = () => {
-        router.push('./')
-    }
+
     return (
         <>
             <Header />
             <main className={styles.main}>
                 <Paper sx={{ padding: '20px' }}>
                     <Grid container direction="column">
-                        <Grid item>
-                            <IconButton onClick={handleClickReturnHome}>
-                                <Home />
-                            </IconButton>
-                        </Grid>
-                        <SignIn />
+                        <LoginAndRegHeader text="Sign In" />
                         <Grid item sx={{ textAlign: 'center' }} md={12}>
                             <form onSubmit={formik.handleSubmit} style={{ padding: "10px" }} action="/api/auth/callback/credentials">
                                 <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
@@ -118,14 +96,17 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                                     </Link>
                                 </Stack>
 
-                                <Button variant='contained' color='primary' type="submit">Login</Button>
+                                <Button variant='contained' color='inherit' type="submit">Login</Button>
                             </form>
 
                         </Grid>
-                        <Grid item sx={{ textAlign: 'center' }}>
-                            <Button variant="contained" color="inherit" onClick={() => signIn("google", {
-                                callbackUrl: `${window.location.origin}/profile/1`,
-                            })}>Sign in with Google</Button>
+                        <Grid item sx={{ textAlign: 'center', paddingBottom: '10px' }} className={inter.className}> or </Grid>
+                        <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <GoogleButton
+                                onClick={() => signIn("google", {
+                                    callbackUrl: `${window.location.origin}/profile/1`,
+                                })}
+                            />
                         </Grid>
                     </Grid>
                 </Paper>
@@ -137,9 +118,20 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
 export default login
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const session = await getSession(context)
+    if (session) {
+        return {
+            redirect: {
+                destination: '/profile/1',
+                permanent: false,
+            },
+        }
+    }
+
     return {
         props: {
             csrfToken: await getCsrfToken(context),
+            session
         },
     }
 }

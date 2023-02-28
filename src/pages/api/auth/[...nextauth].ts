@@ -2,72 +2,65 @@ import axios from "axios"
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
+import cookie from 'cookie'
 export const authOptions: NextAuthOptions = {
     secret: process.env.AUTH_SECRET,
-    pages:{
-        signIn:'/login'
+    pages: {
+        signIn: '/login'
     },
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET
+            clientId: process.env.GOOGLE_ID!,
+            clientSecret: process.env.GOOGLE_SECRET!
         }),
         CredentialsProvider({
-            // The name to display on the sign in form (e.g. 'Sign in with...')
-            name: 'Credentials',
-            // The credentials is used to generate a suitable form on the sign in page.
-            // You can specify whatever fields you are expecting to be submitted.
-            // e.g. domain, username, password, 2FA token, etc.
-            // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
-                username: { label: "Username", type: "text", placeholder: "jsmith" },
+                username: { label: "Username", type: "text" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) {
+            async authorize(credentials, req): Promise<any> {
+                const { registration } = cookie.parse(req.headers!.cookie)
+                let count = 0
+                try {
+                    const u = await axios.post(`${process.env.NEXT_PUBLIC_API}users/login`, ({ ...credentials, cookies: JSON.parse(registration) }))
+                    const { username, email, first_name, middle_name, last_name } = u.data.user
+                    const user = {
+                        name: username,
+                        email: email,
+                        image: null,
+                        full_name: `${first_name} ${middle_name} ${last_name}`,
+                        access_token: u.access_token
+                    }
+                    if (user) {
+                        return user
+                    } else {
+                        return null
+                    }
+                } catch (error) {
+                    console.log(error)
 
-                // You need to provide your own logic here that takes the credentials
-                // submitted and returns either a object representing a user or value
-                // that is false/null if the credentials are invalid.
-                // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-                // You can also use the `req` object to obtain additional parameters
-                // (i.e., the request IP address)
-                const res = await axios.post("/users/login", { credentials })
-                const user = res.data
-                // If no error and we have user data, return it
-                if (res.status === 200 && user) {
-                    return user
                 }
-                // Return null if user data could not be retrieved
-                return null
-            }
+            },
         })
     ],
-    theme: {
-        colorScheme: "light",
-    },
     callbacks: {
-        async jwt({ token }) {
-            token.userRole = "admin"
-            return token
-        },
-        async signIn({ user, account, profile, email, credentials }) {
-            const isAllowedToSignIn = true
-            if (isAllowedToSignIn) {
-                return true
-            } else {
-                // Return false to display a default error message
-                return false
-                // Or you can return a URL to redirect to:
-                // return '/unauthorized'
+        async jwt({ token, user, account }) {
+            if (user) {
+                token.id = user.id;
             }
+            if (account) {
+                token.account = {
+                    ...account
+                };
+                token.accessToken = account.access_token;
+            }
+            return token;
         },
-        async redirect({ url, baseUrl }) {
-            // Allows relative callback URLs
-            if (url.startsWith("/")) return `${baseUrl}${url}`
-            // Allows callback URLs on the same origin
-            else if (new URL(url).origin === baseUrl) return url
-            return baseUrl
-        }
+        async session({ session, token, user }) {
+            session.user!.id = token.id;
+            session.accessToken = token.accessToken;
+            return { ...session };
+        },
     },
 }
 

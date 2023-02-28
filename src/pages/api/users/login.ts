@@ -1,10 +1,13 @@
-import cookie from 'cookie';
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 type Data = {
   message?: string
-  username?: string
+  user?: {
+    username?: string,
+    password?: string
+  }
   e?: unknown
-  password?: string
+
 }
 
 export default function handler(
@@ -12,14 +15,13 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   try {
-    const { registration } = cookie.parse(req.headers.cookie)
-    const { username, password } = JSON.parse(registration)
+    const { username, password, first_name, middle_name, last_name, email } = req.body.cookies
     const bodyUsername = req.body.username
     const bodyPassword = req.body.password
     if (bodyUsername === username && bodyPassword === password)
-      return res.status(200).json({ message: 'logged in', username, password })
+      return res.status(200).json({ message: 'logged in', user: { username, password, first_name, middle_name, last_name, email } })
     else
-      throw 'Account not found'
+      throw new Error('Account not found')
   } catch (e) {
     return res.status(400).json({ e })
   }
