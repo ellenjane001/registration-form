@@ -23,7 +23,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (session) {
     return {
       redirect: {
-        destination: '/profile/1',
+        destination: `/profile/${session.user?.id}`,
         permanent: false,
       },
     }

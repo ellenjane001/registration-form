@@ -1,10 +1,8 @@
-import Logo from '@/assets/logo.jpg'
 import styles from '@/styles/Profile.module.css'
 import { Avatar, Button, Grid, Paper } from '@mui/material'
 import { Inter } from '@next/font/google'
 import { GetServerSidePropsContext } from 'next'
 import { getSession, signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
 import Swal from 'sweetalert2'
 import Header from '../Components/Header/Header'
 import Navigation from '../Components/Navigation/Navigation'
@@ -39,7 +37,7 @@ const Profile = () => {
                                 <h1 className={inter.className}>Welcome {session && session.user?.name}</h1>
                             </Grid>
                             <Grid item>
-                                <Avatar src={session.user?.image !== null ? session.user?.image : ''} sx={{ width: 56, height: 56 }} />
+                                <Avatar src={session.user?.image !== null ? session.user?.image : ''} sx={{ width: 56, height: 56 }} imgProps={{referrerPolicy:'no-referrer'}}/>
                             </Grid>
                             <Grid item>
                                 <p className={inter.className}>You can view this page because you are signed in.</p>

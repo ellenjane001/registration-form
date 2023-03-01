@@ -3,10 +3,9 @@ import styles from '@/styles/Login.module.css'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
-import axios from 'axios'
 import { useFormik } from 'formik'
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next"
-import { getCsrfToken, getSession, signIn } from 'next-auth/react'
+import { getCsrfToken, getSession, signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import GoogleButton from 'react-google-button'
@@ -19,6 +18,7 @@ const inter = Inter({ subsets: ['latin'] })
 const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const router = useRouter()
     const [showPassword, setShowPassword] = useState(false)
+    const [failedLogin, setFailedLogin] = useState(0)
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,20 +33,18 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
         validationSchema: LoginSchema,
         onSubmit: values => {
             const login = async (values: { username: string, password: string }) => {
-                let response = await signIn('credentials', { ...values, redirect: false })
-                if (response!.ok) {
-                    router.push("/profile/1")
+                try {
+                    await signIn('credentials', { ...values, redirect: false })
+                    const session = await getSession()
+                    router.push(`/profile/${session?.user?.id}`)
                     formik.resetForm()
-                } else {
-                    // axios.post('/api/users/failed-login',)
-                    console.log(response!.error)
+                } catch (error) {
+                    console.log(error)
                 }
             }
             login(values)
         },
     })
-
-
     const handleClickDisplayRegister = () => {
         router.push('./registration')
     }
@@ -95,17 +93,13 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                                         Register
                                     </Link>
                                 </Stack>
-
                                 <Button variant='contained' color='inherit' type="submit">Login</Button>
                             </form>
-
                         </Grid>
                         <Grid item sx={{ textAlign: 'center', paddingBottom: '10px' }} className={inter.className}> or </Grid>
                         <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
                             <GoogleButton
-                                onClick={() => signIn("google", {
-                                    callbackUrl: `${window.location.origin}/profile/1`,
-                                })}
+                                onClick={() => signIn('google', { redirect: false })}
                             />
                         </Grid>
                     </Grid>
@@ -122,7 +116,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (session) {
         return {
             redirect: {
-                destination: '/profile/1',
+                destination: `/profile/${session.user?.id}`,
                 permanent: false,
             },
         }

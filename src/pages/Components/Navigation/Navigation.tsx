@@ -24,7 +24,7 @@ const Navigation = (props: Props) => {
                 </Link>
             </Grid>
             {session && <Grid item>
-                <Link href='/profile/1'>
+                <Link href={`/profile/${session.user?.id}`}>
                     <Typography variant='h6' className={inter.className} color={props.active == 'profile' ? '#1976d2' : 'null'}>Profile</Typography>
                 </Link>
             </Grid>}

@@ -12,7 +12,6 @@ export default function Home() {
   const router = useRouter()
   const handleClickDisplayLogin = () => {
     signIn()
-    router.push('/profile/1')
   }
   const handleClickDisplayRegister = () => {
     router.push('/registration')

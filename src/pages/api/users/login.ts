@@ -7,19 +7,23 @@ type Data = {
     password?: string
   }
   e?: unknown
-
 }
 
-export default function handler(
+export default function login(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   try {
-    const { username, password, first_name, middle_name, last_name, email } = req.body.cookies
+    const decodeBase64 = (data: string) => {
+      return Buffer.from(data, 'base64').toString('ascii');
+    }
+    const regCookies = JSON.parse(decodeBase64(req.body.cookies))
     const bodyUsername = req.body.username
     const bodyPassword = req.body.password
-    if (bodyUsername === username && bodyPassword === password)
-      return res.status(200).json({ message: 'logged in', user: { username, password, first_name, middle_name, last_name, email } })
+    const checkIfExist = regCookies.filter((reg: { username: string, password: string }) => reg.username === bodyUsername && bodyPassword === reg.password)
+    if (checkIfExist.length === 1) {
+      return res.status(200).json({ message: 'logged in', user: checkIfExist[0] })
+    }
     else
       throw new Error('Account not found')
   } catch (e) {
