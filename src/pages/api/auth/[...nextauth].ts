@@ -1,8 +1,8 @@
 import axios from "axios"
+import cookie from 'cookie'
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
-import cookie from 'cookie'
 export const authOptions: NextAuthOptions = {
     secret: process.env.AUTH_SECRET,
     pages: {
@@ -19,9 +19,9 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req): Promise<any> {
-                const { registration } = cookie.parse(req.headers!.cookie)
+                const { registration, failedLoginCount } = cookie.parse(req.headers!.cookie)
                 try {
-                    const u = await axios.post(`${process.env.NEXT_PUBLIC_API}users/login`, ({ ...credentials, cookies: registration }))
+                    const u = await axios.post(`${process.env.NEXT_PUBLIC_API}users/login`, ({ ...credentials, cookies: registration, failedLoginCount }))
                     const { email, first_name, middle_name, last_name, id } = u.data.user
                     const user = {
                         name: `${first_name} ${middle_name} ${last_name}`,
@@ -32,11 +32,11 @@ export const authOptions: NextAuthOptions = {
                     }
                     if (user) {
                         return user
-                    } else {
-                        return null
                     }
+                    return null
+
                 } catch (error) {
-                    console.log(error)
+                    console.log(error?.response.data)
                 }
             },
         })

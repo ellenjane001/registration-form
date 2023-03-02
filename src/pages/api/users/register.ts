@@ -1,7 +1,7 @@
 import cookie, { serialize } from "cookie";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { json } from "stream/consumers";
-
+import { decodeBase64,encodeBase64 } from "@/utils/base64";
 type Data = {
   message: string
 }
@@ -10,13 +10,6 @@ export default function register(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const encodeBase64 = (data: string) => {
-    return Buffer.from(data).toString('base64');
-  }
-  const decodeBase64 = (data: string) => {
-    return Buffer.from(data, 'base64').toString('ascii');
-  }
-
   delete req.body.confirm_password
 
   const { registration } = cookie.parse(req.headers.cookie!)

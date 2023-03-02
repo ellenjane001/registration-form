@@ -22,4 +22,11 @@ export type LoginType = {
     username: string
     password: string
 }
-
+export type FailedLoginType = {
+    failedLogin: number,
+    lastLoginAttempt: string,
+    account: {
+        username: string
+        password: string
+    }
+}
