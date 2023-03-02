@@ -34,14 +34,15 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
         let failedLog = await axios.post('/api/users/failed-login', { ...values })
         return failedLog.data.failedLogin.filter((logs: FailedLoginType) => logs.account.username === values.username && decodeBase64(logs.account.password) === values.password)
     }
-    const checker = function failedLoginAndTimeChecker(value: FailedLoginType) {
+    const checker = async function failedLoginAndTimeChecker(value: FailedLoginType) {
         if (value.failedLogin === 3) {
+            console.log(value.lastLoginAttempt)
             let timeEq = Math.floor((new Date() - new Date(value.lastLoginAttempt)) / 60000)
-            if (timeEq === 30) {
-
-            } else {
-                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes` })
-            }
+            console.log(timeEq)
+            // if (timeEq < 30) {
+            //     swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes` })
+            //     await axios.post('/api/users/failed-login', { ...value })
+            // }
         }
     }
     const formik = useFormik({
@@ -60,12 +61,11 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                 } else if (response?.status === 200) {
                     let logs = await loginChecker(values)
                     checker(logs[0])
-                }
-                else {
                     // const session = await getSession()
                     // router.push(`/profile/${session?.user?.id}`)
                     // formik.resetForm()
                 }
+
             }
             login(values)
         },
