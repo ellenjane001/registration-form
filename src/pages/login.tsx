@@ -1,18 +1,16 @@
 import { LoginSchema } from '@/schema'
 import styles from '@/styles/Login.module.css'
 import { FailedLoginType, LoginType } from '@/types'
-import { decodeBase64 } from '@/utils/base64'
-import getHours from '@/utils/getHours'
 import { swalWithErrorIcon, swalwithWarningIcon } from '@/utils/swal'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
-import axios from 'axios'
+import { getCookie, setCookie, deleteCookie } from 'cookies-next'
 import { useFormik } from 'formik'
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next"
 import { getCsrfToken, getSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import GoogleButton from 'react-google-button'
 import Error from './Components/Error/Error'
 import FormItem from './Components/FormItem/FormItem'
@@ -24,27 +22,14 @@ const inter = Inter({ subsets: ['latin'] })
 const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const router = useRouter()
     const [showPassword, setShowPassword] = useState(false)
-    const [locked, setLocked] = useState(false)
+    const [failedLogin, setFailedLogin] = useState(3)
+    const [allowLogin, setAllowLogin] = useState(true)
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
-    const loginChecker = async (values: LoginType) => {
-        let failedLog = await axios.post('/api/users/failed-login', { ...values })
-        return failedLog.data.failedLogin.filter((logs: FailedLoginType) => logs.account.username === values.username && decodeBase64(logs.account.password) === values.password)
-    }
-    const checker = async function failedLoginAndTimeChecker(value: FailedLoginType) {
-        if (value.failedLogin === 3) {
-            console.log(value.lastLoginAttempt)
-            let timeEq = Math.floor((new Date() - new Date(value.lastLoginAttempt)) / 60000)
-            console.log(timeEq)
-            // if (timeEq < 30) {
-            //     swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes` })
-            //     await axios.post('/api/users/failed-login', { ...value })
-            // }
-        }
-    }
+
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -53,22 +38,42 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
         validationSchema: LoginSchema,
         onSubmit: values => {
             const login = async (values: LoginType) => {
-                let response = await signIn('credentials', { ...values, redirect: false })
-                if (response?.status === 401) {
-                    swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found' })
-                    let logChecker = await loginChecker(values)
-                    checker(logChecker[0])
-                } else if (response?.status === 200) {
-                    let logs = await loginChecker(values)
-                    checker(logs[0])
-                    // const session = await getSession()
-                    // router.push(`/profile/${session?.user?.id}`)
-                    // formik.resetForm()
+                const { username } = values
+                if (getCookie('locked')) {
+                    if (username === getCookie('locked')) {
+                        setAllowLogin(false)
+                        swalWithErrorIcon({ message: `Your Account is disabled! Please login again after 30 minutes` })
+                    }
+                } else {
+                    setAllowLogin(true)
                 }
 
+                if (allowLogin) {
+                    let response = await signIn('credentials', { ...values, redirect: false })
+                    if (response) {
+                        if (response?.status === 200) {
+                            const session = await getSession()
+                            router.push(`/profile/${session?.user?.id}`)
+                            formik.resetForm()
+                            setFailedLogin(3)
+                        } else if (response?.status === 401) {
+                            const currentTime = new Date();
+                            const expireTime = new Date(currentTime.getTime() + 20 * 1000); //20 seconds
+                            if (failedLogin > 0) {
+                                swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found' })
+                                setFailedLogin(prevFailedLogin => prevFailedLogin - 1)
+                            }
+                            else if (failedLogin === 0) {
+                                setCookie('locked', username, { expires: expireTime })
+                                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes` })
+                                setAllowLogin(false)
+                            }
+                        }
+                    }
+                }
             }
             login(values)
-        },
+        }
     })
     const handleClickDisplayRegister = () => {
         router.push('./registration')
@@ -118,7 +123,7 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                                         Register
                                     </Link>
                                 </Stack>
-                                <Button variant='contained' color='inherit' type="submit" disabled={locked}>Login</Button>
+                                <Button variant='contained' color='inherit' type="submit">Login</Button>
                             </form>
                         </Grid>
                         <Grid item sx={{ textAlign: 'center', paddingBottom: '10px' }} className={inter.className}> or </Grid>
