@@ -1,5 +1,5 @@
 import Error from '@/components/Error/Error'
-import FormItem from '@/components/FormItem/FormItem'
+import GridWithFormControl from '@/components/GridWithFormControl/GridWithFormControl'
 import { ContactSchema } from '@/schema'
 import styles from '@/styles/Contact.module.css'
 import { ContactType } from '@/types'
@@ -23,12 +23,6 @@ const contact = ({ user }: { user: { name: string, email: string } }) => {
   const [userData, setUserData] = useState({})
   const [showComponent, setShowComponent] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      setUserData({ ...user })
-    }
-  }, [])
-
   const initialValues = {
     name: userData ? userData.name : '',
     message: '',
@@ -36,8 +30,16 @@ const contact = ({ user }: { user: { name: string, email: string } }) => {
     number: ''
   }
   useEffect(() => {
+    if (user) {
+      setUserData({ ...user })
+    }
+  }, [])
+
+
+  useEffect(() => {
     setShowComponent(true);
   }, []);
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: ContactSchema,
@@ -90,22 +92,9 @@ const contact = ({ user }: { user: { name: string, email: string } }) => {
                         <Grid container spacing={2}>
                           <Grid item md={6} xs={12}>
                             <Grid container direction="column" spacing={2}>
-                              <Grid item>
-                                <FormControl fullWidth>
-                                  <FormItem name='name' handleChange={formik.handleChange} value={formik.values.name || ''} label="Your Name" />
-                                </FormControl>
-                              </Grid>
-                              <Grid item>
-                                <FormControl fullWidth>
-                                  <FormItem name='email' handleChange={formik.handleChange} value={formik.values.email || ''} label="Email" />
-                                </FormControl>
-                              </Grid>
-                              <Grid item>
-                                <FormControl fullWidth>
-                                  <FormItem name='number' handleChange={formik.handleChange} value={formik.values.number || ''} label="Phone Number" />
-                                  <Error message={formik.errors.number} checker={formik.touched.number && formik.errors.number} />
-                                </FormControl>
-                              </Grid>
+                              <GridWithFormControl handleChange={formik.handleChange} value={formik.values.name} label="Your Name" message={formik.errors.name} checker={formik.touched.name && formik.errors.name} />
+                              <GridWithFormControl handleChange={formik.handleChange} value={formik.values.email} label="Email" message={formik.errors.email} checker={formik.touched.email && formik.errors.email} />
+                              <GridWithFormControl handleChange={formik.handleChange} value={formik.values.number} label="Phone Number" message={formik.errors.number} checker={formik.touched.number && formik.errors.number} />
                             </Grid>
                           </Grid>
                           <Grid item md={6} xs={12}>

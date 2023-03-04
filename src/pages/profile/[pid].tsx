@@ -25,8 +25,10 @@ const Profile = () => {
             text: 'Do you want to logout?',
             icon: 'question',
             showConfirmButton: true,
-        }).then(confirm => {
-            if (confirm) {
+            showCancelButton: true,
+            allowOutsideClick: false, 
+        }).then(result => {
+            if (result.isConfirmed) {
                 signOut({
                     callbackUrl: `${window.location.origin}/login`
                 })
