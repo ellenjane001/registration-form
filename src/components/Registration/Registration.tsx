@@ -13,12 +13,12 @@ import Swal from 'sweetalert2'
 import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
 import LoginAndRegHeader from '../LoginAndRegHeader/LoginAndRegHeader'
-
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
 });
 
 const inter = Inter({ subsets: ['latin'] })
+
 
 const Registration = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -34,9 +34,11 @@ const Registration = () => {
   }
 
   const router = useRouter()
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: RegistrationSchema,
+    enableReinitialize: true,
     onSubmit: values => {
       const fetchAPI = async (values: RegistrationType) => {
         try {
@@ -91,7 +93,7 @@ const Registration = () => {
               {/* middle name */}
               <Grid item md={4} xs={12}>
                 <FormControl fullWidth>
-                  <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)" />
+                  <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)"/>
                 </FormControl>
               </Grid>
               {items.map((item, i) => {

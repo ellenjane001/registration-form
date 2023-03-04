@@ -1,22 +1,21 @@
 import { LoginSchema } from '@/schema'
 import styles from '@/styles/Login.module.css'
-import { FailedLoginType, LoginType } from '@/types'
+import { LoginType } from '@/types'
 import { swalWithErrorIcon, swalwithWarningIcon } from '@/utils/swal'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Button, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
-import { getCookie, setCookie, deleteCookie } from 'cookies-next'
+import { getCookie, setCookie } from 'cookies-next'
 import { useFormik } from 'formik'
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next"
 import { getCsrfToken, getSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import GoogleButton from 'react-google-button'
-import Error from './Components/Error/Error'
-import FormItem from './Components/FormItem/FormItem'
-import Header from './Components/Header/Header'
-import LoginAndRegHeader from './Components/LoginAndRegHeader/LoginAndRegHeader'
-
+import Error from '../components/Error/Error'
+import FormItem from '../components/FormItem/FormItem'
+import Header from '../components/Header/Header'
+import LoginAndRegHeader from '../components/LoginAndRegHeader/LoginAndRegHeader'
 const inter = Inter({ subsets: ['latin'] })
 
 const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -29,7 +28,8 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
-
+    
+   
     const formik = useFormik({
         initialValues: {
             username: '',

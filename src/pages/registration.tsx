@@ -1,5 +1,5 @@
-import Header from './Components/Header/Header'
-import Registration from './Components/Registration/Registration'
+import Header from '../components/Header/Header'
+import Registration from '../components/Registration/Registration'
 import styles from '@/styles/Registration.module.css'
 import { getSession } from 'next-auth/react'
 import { GetServerSidePropsContext } from 'next'

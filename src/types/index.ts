@@ -8,6 +8,13 @@ export type RegistrationType = {
     number: string
 }
 
+export type ContactType={
+    name:string
+    email:string
+    number:string
+    message:string
+}
+
 export type CreateUserType = {
     username: string
     password: string

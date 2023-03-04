@@ -18,3 +18,10 @@ export const LoginSchema = Yup.object().shape({
   username: Yup.string().max(10, 'Must be less than 10 characters').min(4, 'Must be atleast 4 characters').required('Required'),
   password: Yup.string().required('Required')
 })
+
+export const ContactSchema = Yup.object().shape({
+  name: Yup.string().required('Required'),
+  message: Yup.string().required('Required'),
+  email: Yup.string().required('Required'),
+  number: Yup.string().required('Required')
+})
