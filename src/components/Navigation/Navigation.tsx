@@ -28,6 +28,11 @@ const Navigation = (props: Props) => {
                     <Typography variant='h6' className={inter.className} color={props.active == 'profile' ? '#1976d2' : 'null'}>Profile</Typography>
                 </Link>
             </Grid>}
+            {session && <Grid item>
+                <Link href={`/users`}>
+                    <Typography variant='h6' className={inter.className} color={props.active == 'users' ? '#1976d2' : 'null'}>Users</Typography>
+                </Link>
+            </Grid>}
         </Grid >
     )
 }

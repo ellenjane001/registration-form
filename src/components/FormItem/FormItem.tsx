@@ -10,7 +10,7 @@ const FormItem = ({ name,handleChange,value,label }: Props) => {
     return (
         <>
             <InputLabel htmlFor={name}>{`${label}`}</InputLabel>
-            <OutlinedInput label={label} name={name} id={name} fullWidth onChange={handleChange} value={value}/>
+            <OutlinedInput label={label} name={name} id={name} fullWidth onChange={handleChange} value={value||''}/>
         </>
     )
 }

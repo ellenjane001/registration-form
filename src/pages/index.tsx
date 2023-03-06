@@ -1,3 +1,4 @@
+import Layout from '@/components/Layout/Layout'
 import styles from '@/styles/Home.module.css'
 import { Button, ButtonGroup, CircularProgress, Grid, Paper } from '@mui/material'
 import { signIn, useSession } from 'next-auth/react'
@@ -11,8 +12,18 @@ import Header from '../components/Header/Header'
 const NavigationComponent = dynamic(
   () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
 )
-export default function Home() {
+export default function Home(): JSX.Element {
   const [showComponent, setShowComponent] = useState(true);
+  const [screenSize, setScreenSize] = useState<number>(0);
+
+  useEffect(() => {
+    function handleResize(): void {
+      setScreenSize(window.innerWidth);
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     setShowComponent(true);
@@ -30,31 +41,23 @@ export default function Home() {
 
   return (
     <>
-      <Header title='Home' />
-      <main className={styles.main}>
-        <Paper sx={{ padding: '1rem' }} elevation={0}>
-          <Grid container direction="column" alignItems="center">
-            <Grid item>
-              {showComponent && <NavigationComponent active="home" />}
-            </Grid>
-            <Grid item>
-              <Image src={Hero} alt="hero" priority />
-            </Grid>
-            {!session &&
-              <Grid item>
-                <ButtonGroup>
-                  <Button variant='contained' color='primary' onClick={handleClickDisplayLogin}>Login</Button>
-                  <Button variant='contained' color='secondary' onClick={handleClickDisplayRegister}>Register</Button>
-                </ButtonGroup>
-              </Grid>}
-
-            <Grid item>
-
-            </Grid>
+      <Layout>
+        <Grid container direction="column" alignItems="center">
+          <Grid item>
+            {showComponent && <NavigationComponent active="home" />}
           </Grid>
-        </Paper>
-
-      </main>
+          <Grid item>
+            <Image src={Hero} alt="hero" priority height={screenSize < 400 ? 300 : 400} />
+          </Grid>
+          {!session &&
+            <Grid item>
+              <ButtonGroup>
+                <Button variant='contained' color='primary' onClick={handleClickDisplayLogin}>Login</Button>
+                <Button variant='contained' color='secondary' onClick={handleClickDisplayRegister}>Register</Button>
+              </ButtonGroup>
+            </Grid>}
+        </Grid>
+      </Layout>
     </>
   )
 }

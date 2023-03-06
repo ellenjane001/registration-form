@@ -1,3 +1,11 @@
-.main {
-    min-height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+
+.font{
+    font-family: 'Inter', sans-serif;
+}
+
+.avatar{
+    display: flex;
+    justify-content: center;
 }

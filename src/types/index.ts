@@ -6,6 +6,7 @@ export type RegistrationType = {
     last_name: string
     email: string
     number: string
+    id?:number
 }
 
 export type ContactType={
@@ -29,11 +30,4 @@ export type LoginType = {
     username: string
     password: string
 }
-export type FailedLoginType = {
-    failedLogin: number,
-    lastLoginAttempt: string,
-    account: {
-        username: string
-        password: string
-    }
-}
+

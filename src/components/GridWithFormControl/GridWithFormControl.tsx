@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, FormControl, CircularProgress } from '@mui/material'
+import { Grid, FormControl, CircularProgress, InputLabel, OutlinedInput } from '@mui/material'
 import dynamic from 'next/dynamic'
 
 type FormPropsType = {
-    handleChange: any, value: string, label: string, message: any, checker: any
+    handleChange: any, value: string, label: string, message: any, checker: any,name:string
 }
-const FormItemComponent = dynamic(() => import('@/components/FormItem/FormItem'), { loading: () => <CircularProgress /> })
 const ErrorComponent = dynamic(() => import('@/components/Error/Error'), { loading: () => <CircularProgress /> })
-const GridWithFormControl = ({ handleChange, value, label, message, checker }: FormPropsType) => {
+
+const GridWithFormControl = ({ name ,handleChange, value, label, message, checker }: FormPropsType) => {
     const [showComponent, setShowComponent] = useState(true);
     useEffect(() => {
         setShowComponent(true);
@@ -15,7 +15,8 @@ const GridWithFormControl = ({ handleChange, value, label, message, checker }: F
     return (
         <Grid item>
             <FormControl fullWidth>
-                {showComponent && <FormItemComponent name='number' handleChange={handleChange} value={value || ''} label={label} />}
+                <InputLabel htmlFor={name}>{`${label}`}</InputLabel>
+                <OutlinedInput label={label} name={name} id={name} fullWidth onChange={handleChange} value={value || ''} />
                 {showComponent && <ErrorComponent message={message} checker={checker} />}
             </FormControl>
         </Grid>
