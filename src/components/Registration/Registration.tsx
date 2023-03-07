@@ -1,5 +1,5 @@
-import { RegistrationSchema } from '@/schema/index'
-import { RegistrationType } from '@/types'
+import { RegistrationSchema } from '../../schema/index'
+import { RegistrationType } from '../../types/index'
 import { Button, ButtonGroup, FormControl, Grid, Link, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
