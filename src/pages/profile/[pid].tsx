@@ -105,7 +105,7 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
 export default Profile
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const session = await getSession(context)
+    const session = await getSession(context) as any
     const { registration } = cookie.parse(context.req.headers.cookie!)
     const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get`, { cookie: registration, id: session?.user?.id })
     const { data } = result

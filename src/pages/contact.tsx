@@ -2,38 +2,42 @@ import Error from '@/components/Error/Error'
 import GridWithFormControl from '@/components/GridWithFormControl/GridWithFormControl'
 import Layout from '@/components/Layout/Layout'
 import { ContactSchema } from '@/schema'
-import styles from '@/styles/Contact.module.css'
-import { ContactType } from '@/types'
-import { Button, CircularProgress, FormControl, Grid, InputLabel, OutlinedInput, Paper, Typography } from '@mui/material'
+import { ContactType, RegistrationType } from '@/types'
+import { Button, CircularProgress, FormControl, Grid, InputLabel, OutlinedInput, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
+import cookie from 'cookie'
 import { useFormik } from 'formik'
 import { GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
-import Header from '../components/Header/Header'
 
 const NavigationComponent = dynamic(
   () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
 )
 
 const inter = Inter({ subsets: ['latin'] })
-const contact = ({ user }: { user: { name: string, email: string } }) => {
-  const [userData, setUserData] = useState({})
+const Contact = ({ data, user }: { data: RegistrationType, user: { name: string, email: string, id: number } }) => {
+  const [userData, setUserData] = useState({
+    name: '', email: ''
+  })
   const [showComponent, setShowComponent] = useState(true);
 
   const initialValues = {
     name: userData ? userData.name : '',
     message: '',
     email: userData ? userData.email : '',
-    number: ''
+    number: data ? data.number : ''
   }
   useEffect(() => {
-    if (user) {
-      setUserData({ ...user })
+    const userSetter = () => {
+      if (user) {
+        setUserData({ ...user })
+      }
     }
+    userSetter()
   }, [])
 
 
@@ -72,7 +76,7 @@ const contact = ({ user }: { user: { name: string, email: string } }) => {
       <Layout>
         <Grid container direction="column" spacing={2}>
           <Grid item md={12}>
-            {showComponent && <NavigationComponent active="contact" />}
+            {showComponent && <NavigationComponent active="contact" id={user.id} />}
           </Grid>
           <Grid item md={12}>
             <Typography variant="h4" className={inter.className} sx={{ textAlign: "center" }}>
@@ -122,9 +126,11 @@ const contact = ({ user }: { user: { name: string, email: string } }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   try {
-    const session = await getSession(context)
+    const session = await getSession(context) as any
+    const { registration } = cookie.parse(context.req.headers.cookie!)
+    const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get`, { cookie: registration, id: session?.user?.id })
     return {
-      props: { ...session }
+      props: { ...session, ...result.data }
     }
   } catch (error) {
     console.error(error)
@@ -133,4 +139,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 }
 
-export default contact
+export default Contact

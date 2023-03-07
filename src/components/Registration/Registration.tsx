@@ -1,14 +1,12 @@
 import { RegistrationSchema } from '@/schema'
 import { RegistrationType } from '@/types'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Button, ButtonGroup, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, Paper, Stack, Typography } from '@mui/material'
+import { Button, ButtonGroup, FormControl, Grid, Link, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { signIn } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import Swal from 'sweetalert2'
 import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
@@ -21,8 +19,7 @@ const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
 const inter = Inter({ subsets: ['latin'] })
 
 
-const Registration = () => {
-  const [showPassword, setShowPassword] = useState(false)
+const RegistrationComponent = () => {
   const initialValues = {
     username: '',
     password: '',
@@ -147,4 +144,4 @@ const Registration = () => {
   )
 }
 
-export default Registration
+export default RegistrationComponent

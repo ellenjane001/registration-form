@@ -1,13 +1,11 @@
 import Layout from '@/components/Layout/Layout'
-import styles from '@/styles/Home.module.css'
-import { Button, ButtonGroup, CircularProgress, Grid, Paper } from '@mui/material'
+import { Button, ButtonGroup, CircularProgress, Grid } from '@mui/material'
 import { signIn, useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Hero from '../assets/Resume.gif'
-import Header from '../components/Header/Header'
 
 const NavigationComponent = dynamic(
   () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
@@ -29,7 +27,7 @@ export default function Home(): JSX.Element {
     setShowComponent(true);
   }, []);
 
-  const { data: session } = useSession()
+  const { data: session } = useSession() as any
 
   const router = useRouter()
   const handleClickDisplayLogin = () => {
@@ -44,7 +42,7 @@ export default function Home(): JSX.Element {
       <Layout>
         <Grid container direction="column" alignItems="center">
           <Grid item>
-            {showComponent && <NavigationComponent active="home" />}
+            {showComponent && <NavigationComponent active="home" id={session?.user?.id} />}
           </Grid>
           <Grid item>
             <Image src={Hero} alt="hero" priority height={screenSize < 400 ? 300 : 400} />

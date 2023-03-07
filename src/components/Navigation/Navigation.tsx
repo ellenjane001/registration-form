@@ -1,12 +1,12 @@
-import React from 'react'
 import { Grid, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 const inter = Inter({ subsets: ['latin'] })
 
 interface Props {
     active: string
+    id?:number
 }
 
 const Navigation = (props: Props) => {
@@ -24,7 +24,7 @@ const Navigation = (props: Props) => {
                 </Link>
             </Grid>
             {session && <Grid item>
-                <Link href={`/profile/${session.user?.id}`}>
+                <Link href={`/profile/${props.id}`}>
                     <Typography variant='h6' className={inter.className} color={props.active == 'profile' ? '#1976d2' : 'null'}>Profile</Typography>
                 </Link>
             </Grid>}

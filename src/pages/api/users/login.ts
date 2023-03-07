@@ -24,7 +24,7 @@ export default function login(
     else {
       throw new Error('Account not found')
     }
-  } catch (e) {
+  } catch (e:any) {
     return res.status(400).json(e?.message)
   }
 }

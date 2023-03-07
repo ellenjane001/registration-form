@@ -18,11 +18,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/GridWithFormControl'), { loading: () => <Grid item><CircularProgress /></Grid> })
 const GridItemWithPasswordComponent = dynamic(() => import('@/components/GridItemWithPassword/GridItemWithPassword'), { loading: () => <Grid item><CircularProgress /></Grid> })
-const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const router = useRouter()
+const Login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [failedLogin, setFailedLogin] = useState(3)
     const [allowLogin, setAllowLogin] = useState(true)
     const [showComponent, setShowComponent] = useState(false)
+    const router = useRouter()
 
     useEffect(() => {
         setShowComponent(true)
@@ -51,7 +51,7 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                     let response = await signIn('credentials', { ...values, redirect: false })
                     if (response) {
                         if (response?.status === 200) {
-                            const session = await getSession()
+                            const session = await getSession() as any
                             router.push(`/profile/${session?.user?.id}`)
                             formik.resetForm()
                             setFailedLogin(3)
@@ -91,12 +91,12 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                                 <Grid container direction="column" spacing={1}>
                                     {showComponent && <>
                                         <GridWithFormControlComponent name="username" handleChange={formik.handleChange} value={formik.values.username} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
-                                        <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="password" name='password' label='Password'/>
+                                        <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="password" name='password' label='Password' />
                                     </>}
                                 </Grid>
                                 <Stack direction="row" justifyContent="center" spacing={1} sx={{ padding: '10px' }}>
                                     <Typography variant='subtitle2' className={inter.className} >
-                                        Don't have an account ?
+                                        Don&#39;t have an account ?
                                     </Typography>
                                     <Link component="button" type='button' onClick={handleClickDisplayRegister} className={inter.className}>
                                         Register
@@ -118,10 +118,10 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
     )
 }
 
-export default login
+export default Login
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const session = await getSession(context)
+    const session = await getSession(context) as any
     if (session) {
         return {
             redirect: {

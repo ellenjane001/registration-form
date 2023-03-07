@@ -14,7 +14,7 @@ export default function get(
         const requestId = req.body.id
         let result = registrationCookie.filter(({ id }: RegistrationType) => id === requestId)
         return res.status(200).json({ data: result[0] })
-    } catch (e) {
+    } catch (e:any) {
         return res.status(400).json(e?.message)
     }
 }

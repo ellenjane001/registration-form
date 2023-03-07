@@ -1,25 +1,33 @@
-import Header from '../components/Header/Header'
-import Registration from '../components/Registration/Registration'
 import styles from '@/styles/Registration.module.css'
-import { getSession } from 'next-auth/react'
+import { CircularProgress } from '@mui/material'
 import { GetServerSidePropsContext } from 'next'
+import { getSession } from 'next-auth/react'
+import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
+import Header from '../components/Header/Header'
 
-const registration = () => {
+const RegComponent = dynamic(() => import('@/components/Registration/Registration'), { loading: () => <CircularProgress /> })
+const Registration = () => {
+  const [showComponent, setShowComponent] = useState(false)
+  useEffect(() => {
+    setShowComponent(true)
+  }, [])
+
   return (
     <>
       <Header title='Registration' />
       <main className={styles.main}>
-        <Registration />
+        {showComponent && <RegComponent />}
       </main>
     </>
   )
 }
 
-export default registration
+export default Registration
 
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context)
+  const session = await getSession(context) as any
   if (session) {
     return {
       redirect: {

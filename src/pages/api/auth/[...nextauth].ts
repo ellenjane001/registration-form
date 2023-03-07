@@ -3,6 +3,16 @@ import cookie from 'cookie'
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
+
+interface CustomSession{
+    user:{
+        id:string
+        name?:string|undefined|null
+        email?:string|undefined|null
+        image?:string
+    }
+}
+
 export const authOptions: NextAuthOptions = {
     secret: process.env.AUTH_SECRET,
     pages: {
@@ -27,7 +37,7 @@ export const authOptions: NextAuthOptions = {
                         name: `${first_name} ${middle_name} ${last_name}`,
                         email: email,
                         image: null,
-                        access_token: u.access_token,
+                        access_token: u.data.access_token,
                         id: id
                     }
                     if (user) {
@@ -36,7 +46,7 @@ export const authOptions: NextAuthOptions = {
                     return null
 
                 } catch (error) {
-                    console.log(error?.response.data)
+                    console.log(error)
                 }
             },
         })
@@ -54,9 +64,13 @@ export const authOptions: NextAuthOptions = {
             }
             return token;
         },
-        async session({ session, token, user }) {
-            session.user!.id = token.id;
-            session.accessToken = token.accessToken;
+        async session({ session, token, user }:any) {
+            
+            if (session?.user) {
+                session.user.id= token.id
+                session.user.accessToken = token.accessToken;
+            }
+
             return { ...session };
         },
     },
