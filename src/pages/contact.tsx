@@ -1,7 +1,7 @@
 import Error from '@/components/Error/Error'
 import GridWithFormControl from '@/components/GridWithFormControl/GridWithFormControl'
 import Layout from '@/components/Layout/Layout'
-import { ContactSchema } from '../schema/index'
+import { ContactSchema } from '../Schema/index'
 import { ContactType, RegistrationType } from '@/types'
 import { Button, CircularProgress, FormControl, Grid, InputLabel, OutlinedInput, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'

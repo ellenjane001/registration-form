@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 const phoneRegExp = /^[0]\s*(?:\+?(\d{3}))[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
+
 export const RegistrationSchema = Yup.object().shape({
   username: Yup.string().max(10, 'Must be less than 10 characters').min(4, 'Must be atleast 4 characters').required('Required'),
   password: Yup.string().required('Password is required'),

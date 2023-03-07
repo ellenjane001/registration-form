@@ -1,5 +1,5 @@
 import LoginAndRegHeader from '@/components/LoginAndRegHeader/LoginAndRegHeader'
-import { LoginSchema } from '../schema/index'
+import { LoginSchema } from '../Schema/index'
 import styles from '@/styles/Login.module.css'
 import { LoginType } from '@/types'
 import { swalWithErrorIcon, swalwithWarningIcon } from '@/utils/swal'
