@@ -15,10 +15,19 @@ const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
 });
 
 const inter = Inter({ subsets: ['latin'] })
-
+type Values = {
+  username: string,
+  password: string,
+  confirm_password: string,
+  first_name: string,
+  middle_name: string,
+  last_name: string,
+  email: string,
+  number: string
+}
 export default function Home() {
-  const [showPassword, setShowPassword] = useState(false)
-  const formik = useFormik({
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const formik = useFormik<Values>({
     initialValues: {
       username: '',
       password: '',
@@ -30,18 +39,9 @@ export default function Home() {
       number: ''
     },
     validationSchema: RegistrationSchema,
-    onSubmit: values => {
+    onSubmit: (values:Values) => {
       alert(JSON.stringify(values, null, 2));
-      const fetchAPI = async (values: {
-        username: string,
-        password: string,
-        confirm_password: string,
-        first_name: string,
-        middle_name: string,
-        last_name: string,
-        email: string,
-        number: string
-      }) => {
+      const fetchAPI = async (values:Values) => {
         fetch('https://jsonplaceholder.typicode.com/posts', {
           method: 'POST',
           body: JSON.stringify(
@@ -76,7 +76,7 @@ export default function Home() {
                 {/* firstname */}
                 <Grid item md={4}>
                   <FormControl fullWidth>
-                    <FormItem name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} label="First Name" />
+                    <FormItem name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label="First Name" />
                     {formik.touched.first_name && formik.errors.first_name ? (
                       <FormHelperText error>{formik.errors.first_name}</FormHelperText>
                     ) : null}
@@ -85,7 +85,7 @@ export default function Home() {
                 {/* middle name */}
                 <Grid item md={4}>
                   <FormControl fullWidth>
-                    <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)" />
+                    <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label="Middle Name (Optional)" />
                     {formik.touched.middle_name && formik.errors.middle_name ? (
                       <FormHelperText error>{formik.errors.middle_name}</FormHelperText>
                     ) : null}
@@ -94,7 +94,7 @@ export default function Home() {
                 {/* last name */}
                 <Grid item md={4}>
                   <FormControl fullWidth>
-                    <FormItem name='last_name' value={formik.values.last_name} handleChange={formik.handleChange} label="Last Name" />
+                    <FormItem name='last_name' value={formik.values.last_name} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label="Last Name" />
                     {formik.touched.last_name && formik.errors.last_name ? (
                       <FormHelperText error>{formik.errors.last_name}</FormHelperText>
                     ) : null}
@@ -103,7 +103,7 @@ export default function Home() {
                 {/* email address */}
                 <Grid item md={12}>
                   <FormControl fullWidth>
-                    <FormItem name='email' value={formik.values.email} handleChange={formik.handleChange} label="Email Address" />
+                    <FormItem name='email' value={formik.values.email} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label="Email Address" />
                     {formik.touched.email && formik.errors.email ? (
                       <FormHelperText error>{formik.errors.email}</FormHelperText>
                     ) : null}
@@ -112,7 +112,7 @@ export default function Home() {
                 {/* mobile number */}
                 <Grid item md={12}>
                   <FormControl fullWidth>
-                    <FormItem name='number' value={formik.values.number} handleChange={formik.handleChange} label="Mobile Number" />
+                    <FormItem name='number' value={formik.values.number} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label="Mobile Number" />
                     {formik.touched.number && formik.errors.number ? (
                       <FormHelperText error>{formik.errors.number}</FormHelperText>
                     ) : null}
@@ -121,7 +121,7 @@ export default function Home() {
                 {/* username */}
                 <Grid item md={12}>
                   <FormControl fullWidth>
-                    <FormItem name='username' value={formik.values.username} handleChange={formik.handleChange} label="Username" />
+                    <FormItem name='username' value={formik.values.username} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label="Username" />
                     {formik.touched.username && formik.errors.username ? (
                       <FormHelperText error>{formik.errors.username}</FormHelperText>
                     ) : null}
@@ -133,7 +133,7 @@ export default function Home() {
                     <Grid item md={6}>
                       <FormControl fullWidth>
                         <InputLabel htmlFor="password">Password</InputLabel>
-                        <OutlinedInput label="Password" name="password" id="password" fullWidth onChange={formik.handleChange} value={formik.values.password} type={showPassword ? 'text' : 'password'} endAdornment={
+                        <OutlinedInput label="Password" name="password" id="password" fullWidth onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} type={showPassword ? 'text' : 'password'} endAdornment={
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
@@ -154,7 +154,7 @@ export default function Home() {
                     <Grid item md={6}>
                       <FormControl fullWidth>
                         <InputLabel htmlFor="confirm_password">Confirm Password</InputLabel>
-                        <OutlinedInput label="Confirm Password" name="confirm_password" id="confirm_password" fullWidth onChange={formik.handleChange} value={formik.values.confirm_password} type={showPassword ? 'text' : 'password'} endAdornment={
+                        <OutlinedInput label="Confirm Password" name="confirm_password" id="confirm_password" fullWidth onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.confirm_password} type={showPassword ? 'text' : 'password'} endAdornment={
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
