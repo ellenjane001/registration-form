@@ -19,8 +19,8 @@ const inter = Inter({ subsets: ['latin'] })
 const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/GridWithFormControl'), { loading: () => <Grid item><CircularProgress /></Grid> })
 const GridItemWithPasswordComponent = dynamic(() => import('@/components/GridItemWithPassword/GridItemWithPassword'), { loading: () => <Grid item><CircularProgress /></Grid> })
 const Login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const [failedLogin, setFailedLogin] = useState(3)
-    const [allowLogin, setAllowLogin] = useState(true)
+    const [failedLogin, setFailedLogin] = useState<number>(3)
+    const [allowLogin, setAllowLogin] = useState<boolean>(true)
     const [showComponent, setShowComponent] = useState(false)
     const router = useRouter()
 
@@ -91,7 +91,7 @@ const Login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                                 <Grid container direction="column" spacing={1}>
                                     {showComponent && <>
                                         <GridWithFormControlComponent name="username" handleChange={formik.handleChange} value={formik.values.username} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
-                                        <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="password" name='password' label='Password' />
+                                        <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="passzword" name='password' label='Password' />
                                     </>}
                                 </Grid>
                                 <Stack direction="row" justifyContent="center" spacing={1} sx={{ padding: '10px' }}>
