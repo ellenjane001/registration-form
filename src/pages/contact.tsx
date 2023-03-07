@@ -21,7 +21,7 @@ const NavigationComponent = dynamic(
 const inter = Inter({ subsets: ['latin'] })
 const Contact = ({ data, user }: { data: RegistrationType, user: { name: string, email: string, id: number } }) => {
   const [userData, setUserData] = useState({
-    name: '', email: ''
+    name: '', email: '', id: 0
   })
   const [showComponent, setShowComponent] = useState(true);
 
@@ -76,7 +76,7 @@ const Contact = ({ data, user }: { data: RegistrationType, user: { name: string,
       <Layout>
         <Grid container direction="column" spacing={2}>
           <Grid item md={12}>
-            {showComponent && <NavigationComponent active="contact" id={user.id} />}
+            {showComponent && <NavigationComponent active="contact" id={userData.id} />}
           </Grid>
           <Grid item md={12}>
             <Typography variant="h4" className={inter.className} sx={{ textAlign: "center" }}>
