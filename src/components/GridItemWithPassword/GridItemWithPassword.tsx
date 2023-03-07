@@ -3,7 +3,7 @@ import { Grid, FormControl, InputLabel, OutlinedInput, IconButton, InputAdornmen
 import Error from '../Error/Error'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 
-const GridItemWithPassword = ({ handleChange, value, message, checker }: { handleChange: any, value: string, message: any, checker: any }) => {
+const GridItemWithPassword = ({ handleChange, value, message, checker, name, id ,label}: { handleChange: any, value: string, message: any, checker: any, name: string, id:string,label:string }) => {
     const [showPassword, setShowPassword] = useState(false)
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -13,8 +13,8 @@ const GridItemWithPassword = ({ handleChange, value, message, checker }: { handl
     return (
         <Grid item>
             <FormControl fullWidth>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <OutlinedInput id='password' name="password" label="Password" onChange={handleChange} type={showPassword ? 'text' : 'password'} value={value} endAdornment={
+                <InputLabel htmlFor={id}>{label}</InputLabel>
+                <OutlinedInput id={id} name={name} label={label} onChange={handleChange} type={showPassword ? 'text' : 'password'} value={value} autoComplete="true" endAdornment={
                     <InputAdornment position="end">
                         <IconButton
                             aria-label="toggle password visibility"

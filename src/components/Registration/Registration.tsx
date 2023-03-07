@@ -12,6 +12,7 @@ import { useState } from 'react'
 import Swal from 'sweetalert2'
 import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
+import GridItemWithPassword from '../GridItemWithPassword/GridItemWithPassword'
 import LoginAndRegHeader from '../LoginAndRegHeader/LoginAndRegHeader'
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
@@ -68,11 +69,7 @@ const Registration = () => {
     { name: 'number', value: formik.values.number, handleChangeFormik: formik.handleChange, label: 'Mobile Number', error: formik.errors.number, touched: formik.touched.number },
     { name: 'username', value: formik.values.username, handleChangeFormik: formik.handleChange, label: 'Username', error: formik.errors.username, touched: formik.touched.username }
   ]
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
   const handleClickChangeToLogin = () => {
     signIn()
   }
@@ -93,7 +90,7 @@ const Registration = () => {
               {/* middle name */}
               <Grid item md={4} xs={12}>
                 <FormControl fullWidth>
-                  <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)"/>
+                  <FormItem name='middle_name' value={formik.values.middle_name} handleChange={formik.handleChange} label="Middle Name (Optional)" />
                 </FormControl>
               </Grid>
               {items.map((item, i) => {
@@ -108,43 +105,9 @@ const Registration = () => {
               {/* password */}
               <Grid item md={6} xs={12}>
                 <Grid container direction="column" spacing={2}>
-                  <Grid item md={6}>
-                    <FormControl fullWidth>
-                      <InputLabel htmlFor="password">Password</InputLabel>
-                      <OutlinedInput label="Password" name="password" id="password" fullWidth onChange={formik.handleChange} value={formik.values.password} type={showPassword ? 'text' : 'password'} endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      } />
-                      <Error message={formik.errors.password} checker={formik.touched.password && formik.errors.password} />
-                    </FormControl>
-                  </Grid>
+                  <GridItemWithPassword handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="password" label='Password' name='password' />
                   {/* Confirm password */}
-                  <Grid item md={6}>
-                    <FormControl fullWidth>
-                      <InputLabel htmlFor="confirm_password">Confirm Password</InputLabel>
-                      <OutlinedInput label="Confirm Password" name="confirm_password" id="confirm_password" fullWidth onChange={formik.handleChange} value={formik.values.confirm_password} type={showPassword ? 'text' : 'password'} endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      } />
-                      <Error message={formik.errors.confirm_password} checker={formik.touched.confirm_password && formik.errors.confirm_password} />
-                    </FormControl>
-                  </Grid>
+                  <GridItemWithPassword handleChange={formik.handleChange} value={formik.values.confirm_password} message={formik.errors.confirm_password} checker={formik.touched.confirm_password && formik.errors.confirm_password} name="confirm_password" label="Confirm Password" id="confirm_password" />
                 </Grid>
               </Grid>
               {/* password checklist */}

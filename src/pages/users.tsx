@@ -7,7 +7,6 @@ import cookie from 'cookie'
 import { RegistrationType } from '@/types'
 import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 
-
 const users = (props: { user: any, users: [RegistrationType] }) => {
   return (
     <Layout>
@@ -38,7 +37,6 @@ const users = (props: { user: any, users: [RegistrationType] }) => {
         </TableContainer>
         </Grid>
       </Grid>
-
     </Layout>
   )
 }

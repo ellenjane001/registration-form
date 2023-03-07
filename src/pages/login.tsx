@@ -91,7 +91,7 @@ const login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                                 <Grid container direction="column" spacing={1}>
                                     {showComponent && <>
                                         <GridWithFormControlComponent name="username" handleChange={formik.handleChange} value={formik.values.username} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
-                                        <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} />
+                                        <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="password" name='password' label='Password'/>
                                     </>}
                                 </Grid>
                                 <Stack direction="row" justifyContent="center" spacing={1} sx={{ padding: '10px' }}>
