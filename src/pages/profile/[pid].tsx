@@ -77,13 +77,13 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
                                                         <Avatar src={session.user?.image !== null ? session.user?.image : ''} sx={{ width: 56, height: 56 }} imgProps={{ referrerPolicy: 'no-referrer' }} />
                                                     </Grid>
                                                     <Grid item className={styles.font}>
-                                                        <strong>Name:</strong> {data ? `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''}` : user.name}
+                                                        <strong>Name:</strong> {user ? data ? `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''}` : user.name : ""}
                                                     </Grid>
                                                     <Grid item className={styles.font}>
-                                                        <strong>Email:</strong> {data ? data.email : user.email}
+                                                        <strong>Email:</strong> {user ? data ? data.email : user.email : ""}
                                                     </Grid>
                                                     <Grid item className={styles.font}>
-                                                        <strong>Profile ID:</strong> {data ? data.id : user.id}
+                                                        <strong>Profile ID:</strong> {user ? data ? data.id : user.id : ""}
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
