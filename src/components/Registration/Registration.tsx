@@ -1,5 +1,3 @@
-import { RegistrationSchema } from '../../Schema/index'
-import { RegistrationType } from '../../types/index'
 import { Button, ButtonGroup, FormControl, Grid, Link, Paper, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
@@ -8,9 +6,12 @@ import { signIn } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
+import { RegistrationSchema } from '../../Schema/index'
+import { RegistrationType } from '../../types/index'
 import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
 import GridItemWithPassword from '../GridItemWithPassword/GridItemWithPassword'
+import GridWithFormControl from '../GridWithFormControl/GridWithFormControl'
 import LoginAndRegHeader from '../LoginAndRegHeader/LoginAndRegHeader'
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
@@ -33,10 +34,12 @@ const RegistrationComponent = () => {
 
   const router = useRouter()
 
-  const formik = useFormik({
+  const formik = useFormik<RegistrationType>({
     initialValues: initialValues,
     validationSchema: RegistrationSchema,
     enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur:true,
     onSubmit: values => {
       const fetchAPI = async (values: RegistrationType) => {
         try {
@@ -78,12 +81,8 @@ const RegistrationComponent = () => {
           <form onSubmit={formik.handleSubmit} >
             <Grid container alignItems="center" justifyContent="center" sx={{ padding: '10px' }} spacing={2}>
               {/* firstname */}
-              <Grid item md={4} xs={12}>
-                <FormControl fullWidth>
-                  <FormItem name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} label="First Name" />
-                  <Error message={formik.errors.first_name} checker={formik.touched.first_name && formik.errors.first_name} />
-                </FormControl>
-              </Grid>
+              <GridWithFormControl name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label='FirstName' message={formik
+                .errors.first_name} checker={formik.touched.first_name && formik.errors.first_name} />
               {/* middle name */}
               <Grid item md={4} xs={12}>
                 <FormControl fullWidth>

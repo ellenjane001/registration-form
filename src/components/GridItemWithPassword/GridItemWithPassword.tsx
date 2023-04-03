@@ -3,7 +3,17 @@ import { Grid, FormControl, InputLabel, OutlinedInput, IconButton, InputAdornmen
 import Error from '../Error/Error'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 
-const GridItemWithPassword = ({ handleChange, value, message, checker, name, id ,label}: { handleChange: any, value: string, message: any, checker: any, name: string, id:string,label:string }) => {
+interface GridItemWithPasswordType {
+    handleChange: any,
+    value: string | undefined,
+    message: any,
+    checker: any,
+    name: string,
+    id: string,
+    label: string
+}
+
+const GridItemWithPassword = ({ handleChange, value, message, checker, name, id, label }: GridItemWithPasswordType) => {
     const [showPassword, setShowPassword] = useState(false)
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 

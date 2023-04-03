@@ -12,12 +12,12 @@ const LoginAndRegHeader = (props: { text: string }) => {
     }
     return (
         <Grid container>
-            <Grid item xs={1} md={1}>
+            <Grid item xs={12} md={1}>
                 <IconButton onClick={handleClickReturnHome}>
                     <Home />
                 </IconButton>
             </Grid>
-            <Grid item xs={11} md={11} sx={{ textAlign: "right" }}>
+            <Grid item xs={12} md={11} sx={{ textAlign: "right" }}>
                 <h1 className={inter.className}>{text}</h1>
             </Grid>
         </Grid>

@@ -23,7 +23,9 @@ const Login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
     const [allowLogin, setAllowLogin] = useState<boolean>(true)
     const [showComponent, setShowComponent] = useState(false)
     const router = useRouter()
-
+    const handleClickSignInKeyCloak = () => {
+        signIn('keycloak')
+    }
     useEffect(() => {
         setShowComponent(true)
     }, [])
@@ -90,7 +92,7 @@ const Login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                                 <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
                                 <Grid container direction="column" spacing={1}>
                                     {showComponent && <>
-                                        <GridWithFormControlComponent name="username" handleChange={formik.handleChange} value={formik.values.username} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
+                                        <GridWithFormControlComponent name="username" handleChange={formik.handleChange} value={formik.values.username} handleBlur={formik.handleBlur} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
                                         <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="passzword" name='password' label='Password' />
                                     </>}
                                 </Grid>
@@ -107,9 +109,16 @@ const Login = ({ csrfToken }: InferGetServerSidePropsType<typeof getServerSidePr
                         </Grid>
                         <Grid item sx={{ textAlign: 'center', paddingBottom: '10px' }} className={inter.className}> or </Grid>
                         <Grid item sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <GoogleButton
-                                onClick={() => signIn('google', { redirect: false })}
-                            />
+                            <Grid container direction="column" alignItems="center" spacing={1}>
+                                <Grid item>
+                                    <GoogleButton
+                                        onClick={() => signIn('google', { redirect: false })}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="contained" color='inherit' onClick={handleClickSignInKeyCloak}>SignIn with Keycloak</Button>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Paper>

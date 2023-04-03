@@ -2,6 +2,7 @@ import axios from "axios"
 import cookie from 'cookie'
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import KeycloakProvider from "next-auth/providers/keycloak"
 import GoogleProvider from "next-auth/providers/google"
 
 interface CustomSession{
@@ -49,7 +50,12 @@ export const authOptions: NextAuthOptions = {
                     console.log(error)
                 }
             },
-        })
+        }),
+        KeycloakProvider({
+            clientId: process.env.KEYCLOAK_ID!,
+            clientSecret: process.env.KEYCLOAK_SECRET!,
+            issuer: process.env.KEYCLOAK_ISSUER,
+          })
     ],
     callbacks: {
         async jwt({ token, user, account }) {

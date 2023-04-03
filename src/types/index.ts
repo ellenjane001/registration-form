@@ -7,6 +7,7 @@ export type RegistrationType = {
     email: string
     number: string
     id?:number
+    confirm_password?:string | undefined
 }
 
 export type ContactType={
