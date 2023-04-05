@@ -12,13 +12,13 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
-import GIF from '../../assets/hiring.gif'
+import TwoPeople from '../../assets/twopeople.png'
 const NavigationComponent = dynamic(
     () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
 )
 const inter = Inter({ subsets: ['latin'] })
 
-const Profile = (props: { data: RegistrationType, user: { name: string, email: string, image: string | null, id: number }, expires: any }) => {
+const Profile = (props: { data: RegistrationType, user: { name: string, email: string, image: string | null, id: number }, expires: any }, qoute) => {
 
     const { data, user } = props
     const [showComponent, setShowComponent] = useState(true);
@@ -88,8 +88,10 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
                                                 </Grid>
                                             </Grid>
                                             <Grid item md={6} xs={12} sx={{ textAlign: "center" }}>
-                                                <Image src={GIF} alt="static image" height={200} />
+                                                <Image src={TwoPeople} alt="static image" height={200} />
+
                                             </Grid>
+                                            <Grid item> <a href="https://www.freepik.com/free-vector/back-back-concept-illustration_13850246.htm#query=employee&position=4&from_view=keyword&track=sph">Image by storyset</a> on Freepik</Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -108,6 +110,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getSession(context) as any
     const { registration } = cookie.parse(context.req.headers.cookie!)
     const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get`, { cookie: registration, id: session?.user?.id })
+
     const { data } = result
     if (!session) {
         return {

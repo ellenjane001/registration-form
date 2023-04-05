@@ -5,11 +5,15 @@ interface AppState {
         isLoggedIn: boolean
     }
     setAuth: (val: { isLoggedIn: boolean }) => void,
+    theme: boolean,
+    setTheme: any
 }
 
 const useAppStore = create<AppState>()((set) => ({
     auth: { isLoggedIn: false },
-    setAuth: (val) => set(state => ({ auth: { isLoggedIn: val.isLoggedIn } }))
+    setAuth: (val) => set(() => ({ auth: { isLoggedIn: val.isLoggedIn } })),
+    theme: false,
+    setTheme: (value: boolean) => set(() => ({ theme: value }))
 }))
 
 
