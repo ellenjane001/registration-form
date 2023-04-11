@@ -13,13 +13,13 @@ interface GridItemWithPasswordType {
     label: string
 }
 
-const GridItemWithPassword = ({ handleChange, value, message, checker, name, id, label }: GridItemWithPasswordType) => {
-    const [showPassword, setShowPassword] = useState(false)
+const GridItemWithPassword = ({ handleChange, value, message, checker, name, id, label }: GridItemWithPasswordType): JSX.Element => {
+    const [showPassword, setShowPassword] = useState<boolean>(false)
+    
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault()
+
     return (
         <Grid item>
             <FormControl fullWidth>

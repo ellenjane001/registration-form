@@ -4,7 +4,7 @@ type Props = {
     title?: string
 }
 
-const Header = (props: Props) => {
+const Header = (props: Props): JSX.Element => {
     return (
         <Head>
             <title>Profile</title>

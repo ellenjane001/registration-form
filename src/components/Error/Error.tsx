@@ -5,7 +5,7 @@ type ErrorProps = {
     message: string | undefined,
     checker: string | false | undefined
 }
-const Error = (props: ErrorProps) => {
+const Error = (props: ErrorProps): JSX.Element => {
     const { checker, message } = props
     return (
         <>

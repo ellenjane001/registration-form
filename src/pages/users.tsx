@@ -1,6 +1,6 @@
-import Layout from '@/components/Layout/Layout'
+import Layout from '@/components/Templates/Layout/Layout'
 import Navigation from '@/components/Navigation/Navigation'
-import { GetServerSidePropsContext } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
 import axios from 'axios'
 import cookie from 'cookie'
@@ -10,31 +10,32 @@ import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Ta
 const users = (props: { user: any, users: [RegistrationType] }) => {
   return (
     <Layout>
-      <Navigation active='users' />
-      <Grid container justifyContent="center" sx={{padding:'20px'}}>
-        <Grid item><TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Username</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {props.users.map(user => (
-                <TableRow
-                  key={user.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {user.id}
-                  </TableCell>
-                  <TableCell>{user.username}</TableCell>
+      <Navigation active='users' id={props.user.id} />
+      <Grid container justifyContent="center" sx={{ padding: '20px' }}>
+        <Grid item>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Username</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {props.users.map(user => (
+                  <TableRow
+                    key={user.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {user.id}
+                    </TableCell>
+                    <TableCell>{user.username}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     </Layout>
@@ -43,7 +44,7 @@ const users = (props: { user: any, users: [RegistrationType] }) => {
 
 export default users
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   try {
     const session = await getSession(context)
     const { registration } = cookie.parse(context.req.headers.cookie!)

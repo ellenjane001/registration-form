@@ -13,14 +13,14 @@ import FormItem from '../FormItem/FormItem'
 import GridItemWithPassword from '../GridItemWithPassword/GridItemWithPassword'
 import GridWithFormControl from '../GridWithFormControl/GridWithFormControl'
 import LoginAndRegHeader from '../LoginAndRegHeader/LoginAndRegHeader'
+
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
 });
 
 const inter = Inter({ subsets: ['latin'] })
 
-
-const RegistrationComponent = () => {
+const RegistrationComponent = (): JSX.Element => {
   const initialValues = {
     username: '',
     password: '',
@@ -39,7 +39,7 @@ const RegistrationComponent = () => {
     validationSchema: RegistrationSchema,
     enableReinitialize: true,
     validateOnChange: true,
-    validateOnBlur:true,
+    validateOnBlur: true,
     onSubmit: values => {
       const fetchAPI = async (values: RegistrationType) => {
         try {

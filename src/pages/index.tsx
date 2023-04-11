@@ -1,71 +1,74 @@
-import Layout from '@/components/Layout/Layout'
-import { Button, ButtonGroup, CircularProgress, Grid } from '@mui/material'
+import ImageMotion from '@/components/ImageMotion/ImageMotion'
+import Layout from '@/components/Templates/Layout/Layout'
+import LoginAndRegisterButton from '@/components/LoginAndRegisterButton/LoginAndRegisterButton'
+import StyledIElement from '@/components/StyledComponents/StyledIElement/StyledIElement'
+import { CircularProgress, Grid, Skeleton } from '@mui/material'
 import axios from 'axios'
-import { signIn, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import People from '../assets/people.png'
+import { GetStaticProps } from 'next'
 
 const NavigationComponent = dynamic(
   () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
 )
-export default function Home(): JSX.Element {
-  const [showComponent, setShowComponent] = useState(true);
-  const [quote, setQuote] = useState("")
+export default function Home({ content }: { content: string }): JSX.Element {
+  const [showComponent, setShowComponent] = useState<boolean>(true);
+
   useEffect(() => {
     setShowComponent(true);
-    const getQoutes = async () => {
-      const q = await axios.get('https://api.quotable.io/random')
-      setQuote(q.data.content)
-    }
-    getQoutes()
   }, []);
 
   const { data: session } = useSession() as any
-
-  const router = useRouter()
-
-  const handleClickDisplayLogin = () => {
-    signIn()
-  }
-  const handleClickDisplayRegister = () => {
-    router.push('/registration')
-  }
 
   return (
     <>
       <Layout>
         <Grid container direction="column" alignItems="center" spacing={2} className='font'>
-          <Grid item>
+          <Grid item md={12}>
             {showComponent && <NavigationComponent active="home" id={session?.user?.id} />}
           </Grid>
           <Grid item>
-            <Image src={People} alt="hero" priority style={{ objectFit: "contain", width: "100%" }} />
+            <ImageMotion>
+              <Image src={People} alt="hero" priority style={{ objectFit: "contain", width: "100%", height: "auto" }} />
+            </ImageMotion>
           </Grid>
           <Grid item>
-            <a href="https://www.freepik.com/free-vector/flat-crowd-people-fast-running-rushing-work_37476426.htm#query=employee&position=9&from_view=keyword&track=sph" style={{ color: "#1976d2" }}>Image by redgreystock</a> on Freepik
+            <StyledIElement>
+              <a href="https://www.freepik.com/free-vector/flat-crowd-people-fast-running-rushing-work_37476426.htm#query=employee&position=9&from_view=keyword&track=sph" style={{ color: "#1976d2" }}>Image by redgreystock</a> on Freepik
+            </StyledIElement>
           </Grid>
           <Grid item>
             <strong>
-              {quote}
+              {content ? content : <Skeleton variant="text" sx={{ fontSize: '1rem' }} />}
             </strong>
           </Grid>
           <Grid item>
-            <i>
+            <StyledIElement>
               Random Quotes generated from <a href="https://github.com/lukePeavey/quotable#get-random-quote" style={{ color: "#1976d2" }}>this Github link</a>
-            </i>
+            </StyledIElement>
           </Grid>
           {!session &&
-            <Grid item>
-              <ButtonGroup>
-                <Button variant='contained' color='primary' onClick={handleClickDisplayLogin}>Login</Button>
-                <Button variant='contained' color='secondary' onClick={handleClickDisplayRegister}>Register</Button>
-              </ButtonGroup>
-            </Grid>}
+            <LoginAndRegisterButton />}
         </Grid>
       </Layout>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    let result = await axios.get('https://api.quotable.io/random')
+    return {
+      props: { ...result.data }
+    }
+
+  } catch (e) {
+    return {
+      props: {}
+    }
+  }
+
 }

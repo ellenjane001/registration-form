@@ -3,15 +3,17 @@ import { Grid, FormControl, CircularProgress, InputLabel, OutlinedInput } from '
 import dynamic from 'next/dynamic'
 
 type FormPropsType = {
-    handleChange: any, value: string, label: string, message: any, checker: any,name:string,handleBlur:any
+    handleChange: any, value: string, label: string, message: any, checker: any, name: string, handleBlur: any
 }
 const ErrorComponent = dynamic(() => import('@/components/Error/Error'), { loading: () => <CircularProgress /> })
 
-const GridWithFormControl = ({ name ,handleChange, value, label, message, checker,handleBlur }: FormPropsType) => {
-    const [showComponent, setShowComponent] = useState(true);
+const GridWithFormControl = ({ name, handleChange, value, label, message, checker, handleBlur }: FormPropsType): JSX.Element => {
+    const [showComponent, setShowComponent] = useState<boolean>(true)
+
     useEffect(() => {
         setShowComponent(true);
     }, []);
+
     return (
         <Grid item md={4} xs={12}>
             <FormControl fullWidth>

@@ -1,4 +1,6 @@
-import Layout from '@/components/Layout/Layout'
+import ImageMotion from '@/components/ImageMotion/ImageMotion'
+import Layout from '@/components/Templates/Layout/Layout'
+import StyledIElement from '@/components/StyledComponents/StyledIElement/StyledIElement'
 import styles from '@/styles/Profile.module.css'
 import { RegistrationType } from '@/types'
 import { Avatar, Button, CircularProgress, Grid, Paper, Typography } from '@mui/material'
@@ -13,6 +15,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import TwoPeople from '../../assets/twopeople.png'
+
 const NavigationComponent = dynamic(
     () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
 )
@@ -21,12 +24,13 @@ const inter = Inter({ subsets: ['latin'] })
 const Profile = (props: { data: RegistrationType, user: { name: string, email: string, image: string | null, id: number }, expires: any }) => {
 
     const { data, user } = props
-    const [showComponent, setShowComponent] = useState(true);
+    const [showComponent, setShowComponent] = useState<boolean>(true);
     const { data: session } = useSession()
 
     useEffect(() => {
         setShowComponent(true);
     }, []);
+    
     const handleClickLogout = () => {
         Swal.fire({
             title: 'Logout',
@@ -50,7 +54,7 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
                 <Layout>
                     <Grid container direction="column" alignItems="center" spacing={3} alignContent="center">
                         <Grid item xs={12}>
-                            {showComponent && <NavigationComponent active="profile" />}
+                            {showComponent && <NavigationComponent active="profile" id={props.user.id} />}
                         </Grid>
                         <Grid item md={12}>
                             <h1 className={inter.className}>Welcome {session && session.user?.name}</h1>
@@ -88,9 +92,15 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
                                                 </Grid>
                                             </Grid>
                                             <Grid item md={6} xs={12} sx={{ textAlign: "center" }}>
-                                                <Image src={TwoPeople} alt="static image" height={200} />
+                                                <ImageMotion>
+                                                    <Image src={TwoPeople} alt="static image" height={200} />
+                                                </ImageMotion>
                                             </Grid>
-                                            <Grid item> <a href="https://www.freepik.com/free-vector/back-back-concept-illustration_13850246.htm#query=employee&position=4&from_view=keyword&track=sph">Image by storyset</a> on Freepik</Grid>
+                                            <Grid item>
+                                                <StyledIElement className={styles.font}>
+                                                    <a href="https://www.freepik.com/free-vector/back-back-concept-illustration_13850246.htm#query=employee&position=4&from_view=keyword&track=sph">Image by storyset</a> on Freepik
+                                                </StyledIElement>
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -124,7 +134,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         return {
             props: { ...session, ...data }
         }
-        
+
     } catch (e) {
         return {
             props: {}

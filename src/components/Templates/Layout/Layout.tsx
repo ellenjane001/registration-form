@@ -9,12 +9,9 @@ interface LayoutProps {
     children?: any
 }
 
-// const NavigationComponent = dynamic(
-//     () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
-//   )
 const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <CircularProgress /> })
 
-const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+const Layout: React.FC<LayoutProps> = ({ children, title }): JSX.Element => {
     return (
         <>
             <Header />
