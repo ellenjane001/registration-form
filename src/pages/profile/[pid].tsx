@@ -18,7 +18,7 @@ const NavigationComponent = dynamic(
 )
 const inter = Inter({ subsets: ['latin'] })
 
-const Profile = (props: { data: RegistrationType, user: { name: string, email: string, image: string | null, id: number }, expires: any }, qoute) => {
+const Profile = (props: { data: RegistrationType, user: { name: string, email: string, image: string | null, id: number }, expires: any }) => {
 
     const { data, user } = props
     const [showComponent, setShowComponent] = useState(true);
@@ -89,7 +89,6 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
                                             </Grid>
                                             <Grid item md={6} xs={12} sx={{ textAlign: "center" }}>
                                                 <Image src={TwoPeople} alt="static image" height={200} />
-
                                             </Grid>
                                             <Grid item> <a href="https://www.freepik.com/free-vector/back-back-concept-illustration_13850246.htm#query=employee&position=4&from_view=keyword&track=sph">Image by storyset</a> on Freepik</Grid>
                                         </Grid>
@@ -107,21 +106,29 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
 export default Profile
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const session = await getSession(context) as any
-    const { registration } = cookie.parse(context.req.headers.cookie!)
-    const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get`, { cookie: registration, id: session?.user?.id })
+    try {
+        const session = await getSession(context) as any
+        const { registration } = cookie.parse(context.req.headers.cookie!)
 
-    const { data } = result
-    if (!session) {
+        if (!session) {
+            return {
+                redirect: {
+                    destination: `${process.env.NEXTAUTH_URL}/login`,
+                    permanent: false,
+                },
+            }
+        }
+        const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get`, { cookie: registration, id: session?.user?.id })
+        const { data } = result
+
         return {
-            redirect: {
-                destination: '/login',
-                permanent: false,
-            },
+            props: { ...session, ...data }
+        }
+        
+    } catch (e) {
+        return {
+            props: {}
         }
     }
 
-    return {
-        props: { ...session, ...data }
-    }
 }
