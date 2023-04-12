@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../Header/Header'
 import styles from '@/styles/Layout.module.css'
-import { CircularProgress, Paper } from '@mui/material'
+import { CircularProgress, Grid, Paper } from '@mui/material'
 import dynamic from 'next/dynamic'
 
 interface LayoutProps {
@@ -18,10 +18,11 @@ const Layout: React.FC<LayoutProps> = ({ children, title }): JSX.Element => {
             <main className={styles.main}>
                 <StyledPaperComponent>
                     <Paper sx={{ padding: '1rem' }} elevation={0}>
-                        {children}
+                        <Grid container direction="column" alignItems="center" spacing={2} className='font'>
+                            {children}
+                        </Grid>
                     </Paper >
                 </StyledPaperComponent>
-
             </main>
         </>
     )

@@ -11,6 +11,9 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/login'
     },
+    jwt: {
+        maxAge: 60
+    },
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID!,

@@ -29,6 +29,7 @@ export default Registration
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   try {
     const session = await getSession(context) as any
+    console.log(session)
     if (session) {
       return {
         redirect: {
@@ -37,11 +38,14 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         },
       }
     }
-
-    return {
-      props: {}
+    else {
+      return {
+        props: {}
+      }
     }
+
   } catch (e) {
+
     console.log((e as Error).message)
     return { props: {} }
   }

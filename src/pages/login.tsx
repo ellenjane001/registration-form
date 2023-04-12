@@ -8,8 +8,8 @@ import { Button, CircularProgress, Grid, Link, Paper, Stack, ThemeProvider, Typo
 import { Inter } from '@next/font/google'
 import { getCookie, setCookie } from 'cookies-next'
 import { useFormik } from 'formik'
-import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next"
-import { getCsrfToken, getSession, signIn } from 'next-auth/react'
+import type { GetServerSideProps, GetServerSidePropsContext } from "next"
+import { getSession, signIn } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -150,6 +150,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             }
         }
         return { props: {} }
+
     } catch (e) {
         console.log((e as Error).message)
         return { props: {} }

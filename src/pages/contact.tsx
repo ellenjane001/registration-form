@@ -7,12 +7,13 @@ import { Inter } from '@next/font/google'
 import axios from 'axios'
 import cookie from 'cookie'
 import { useFormik } from 'formik'
-import { GetServerSidePropsContext } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { getSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import { ContactSchema } from '../Schema/index'
+import NavGrid from '@/components/NavGrid/NavGrid'
 
 const NavigationComponent = dynamic(
   () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
@@ -75,58 +76,56 @@ const Contact = ({ data, user }: { data: RegistrationType, user: userDataType })
     },
   })
   return (
-    <>
-      <Layout>
-        <Grid container direction="column" spacing={2}>
-          <Grid item md={12}>
-            {showComponent && <NavigationComponent active="contact" id={userData.id} />}
+    <Layout>
+      <NavGrid>
+        {showComponent && <NavigationComponent active="contact" id={userData.id} />}
+      </NavGrid>
+      <Grid item md={12}>
+        <Typography variant="h4" className={inter.className} sx={{ textAlign: "center" }}>
+          Get in touch!
+        </Typography>
+      </Grid>
+      <Grid item md={12}>
+        <Grid container direction='column' alignItems="center" spacing={1}>
+          <Grid item>
+            <Typography variant='h6'>Contact Form</Typography>
           </Grid>
-          <Grid item md={12}>
-            <Typography variant="h4" className={inter.className} sx={{ textAlign: "center" }}>
-              Get in touch!
-            </Typography>
-          </Grid>
-          <Grid item md={12}>
-            <Grid container direction='column' alignItems="center" spacing={1}>
-              <Grid item>
-                <Typography variant='h6'>Contact Form</Typography>
-              </Grid>
-              <Grid item>
-                <form onSubmit={formik.handleSubmit}>
-                  <Grid container direction="column" spacing={2}>
-                    <Grid item>
-                      <Grid container spacing={2}>
-                        <Grid item md={6} xs={12}>
-                          <Grid container direction="column" spacing={2}>
-                            <GridWithFormControl name="name" handleChange={formik.handleChange} value={formik.values.name} label="Your Name" message={formik.errors.name} checker={formik.touched.name && formik.errors.name} handleBlur={formik.handleBlur} />
-                            <GridWithFormControl name="email" handleChange={formik.handleChange} value={formik.values.email} label="Email" message={formik.errors.email} checker={formik.touched.email && formik.errors.email} handleBlur={formik.handleBlur} />
-                            <GridWithFormControl name="number" handleChange={formik.handleChange} value={formik.values.number} label="Phone Number" message={formik.errors.number} checker={formik.touched.number && formik.errors.number} handleBlur={formik.handleBlur} />
-                          </Grid>
-                        </Grid>
-                        <Grid item md={6} xs={12}>
-                          <FormControl fullWidth>
-                            <InputLabel htmlFor='message'>Message</InputLabel>
-                            <OutlinedInput id='message' name='message' label="Message" onChange={formik.handleChange} value={formik.values.message} multiline rows={7} />
-                            <Error message={formik.errors.message} checker={formik.touched.message && formik.errors.message} />
-                          </FormControl>
-                        </Grid>
+          <Grid item>
+            <form onSubmit={formik.handleSubmit}>
+              <Grid container direction="column" spacing={2}>
+                <Grid item>
+                  <Grid container spacing={2}>
+                    <Grid item md={6} xs={12}>
+                      <Grid container direction="column" spacing={2}>
+                        <GridWithFormControl name="name" handleChange={formik.handleChange} value={formik.values.name} label="Your Name" message={formik.errors.name} checker={formik.touched.name && formik.errors.name} handleBlur={formik.handleBlur} />
+                        <GridWithFormControl name="email" handleChange={formik.handleChange} value={formik.values.email} label="Email" message={formik.errors.email} checker={formik.touched.email && formik.errors.email} handleBlur={formik.handleBlur} />
+                        <GridWithFormControl name="number" handleChange={formik.handleChange} value={formik.values.number} label="Phone Number" message={formik.errors.number} checker={formik.touched.number && formik.errors.number} handleBlur={formik.handleBlur} />
                       </Grid>
                     </Grid>
-                    <Grid item>
-                      <Button variant='contained' size='large' type="submit" fullWidth>Send</Button>
+                    <Grid item md={6} xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel htmlFor='message'>Message</InputLabel>
+                        <OutlinedInput id='message' name='message' label="Message" onChange={formik.handleChange} value={formik.values.message} multiline rows={7} />
+                        <Error message={formik.errors.message} checker={formik.touched.message && formik.errors.message} />
+                      </FormControl>
                     </Grid>
                   </Grid>
-                </form>
+                </Grid>
+                <Grid item>
+                  <Button variant='contained' size='large' type="submit" fullWidth>Send</Button>
+                </Grid>
               </Grid>
-            </Grid>
+            </form>
           </Grid>
         </Grid>
-      </Layout>
-    </>
+      </Grid>
+
+    </Layout>
+
   )
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 
   try {
     const session = await getSession(context) as any
