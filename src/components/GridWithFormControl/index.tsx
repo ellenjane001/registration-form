@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Grid, FormControl, CircularProgress, InputLabel, OutlinedInput } from '@mui/material'
 import dynamic from 'next/dynamic'
+import { FormPropsType } from '@/types'
 
-type FormPropsType = {
-    handleChange: any, value: string, label: string, message: any, checker: any, name: string, handleBlur: any, md: number
-}
 const ErrorComponent = dynamic(() => import('@/components/Error/Error'), { loading: () => <CircularProgress /> })
 
 const GridWithFormControl = ({ name, handleChange, value, label, message, checker, handleBlur, md }: FormPropsType): JSX.Element => {

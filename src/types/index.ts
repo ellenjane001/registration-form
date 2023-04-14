@@ -1,3 +1,5 @@
+import { ReactNode } from "react"
+
 export type RegistrationType = {
     username: string
     password: string
@@ -6,15 +8,15 @@ export type RegistrationType = {
     last_name: string
     email: string
     number: string
-    id?:number
-    confirm_password?:string | undefined
+    id?: number
+    confirm_password?: string | undefined
 }
 
-export type ContactType={
-    name:string
-    email:string
-    number?:string
-    message:string
+export type ContactType = {
+    name: string
+    email: string
+    number?: string
+    message: string
 }
 
 export type CreateUserType = {
@@ -32,3 +34,48 @@ export type LoginType = {
     password: string
 }
 
+export interface NavigationProps {
+    active: string
+    id?: number
+}
+
+export type ErrorProps = {
+    message: string | undefined,
+    checker: string | false | undefined
+}
+
+export type FormItemProps = {
+    name: string
+    value: string
+    handleChange: any
+    label: string
+}
+
+export interface GridItemWithPasswordType {
+    handleChange: any,
+    value: string | undefined,
+    message: any,
+    checker: any,
+    name: string,
+    id: string,
+    label: string
+}
+
+export type FormPropsType = {
+    handleChange: any,
+    value: string,
+    label: string,
+    message: any,
+    checker: any,
+    name: string,
+    handleBlur: any,
+    md: number
+}
+
+export type childrenType = {
+    children: ReactNode
+}
+
+export type CustomHeaderType = {
+    text: string
+}

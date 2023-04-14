@@ -1,10 +1,6 @@
 import Head from 'next/head'
-import React from 'react'
-type Props = {
-    title?: string
-}
 
-const Header = (props: Props): JSX.Element => {
+const Header = (): JSX.Element => {
     return (
         <Head>
             <title>Profile</title>

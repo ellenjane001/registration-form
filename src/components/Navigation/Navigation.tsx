@@ -1,3 +1,4 @@
+import { NavigationProps } from '@/types'
 import useAppStore from '@/utils/AppStore'
 import { Button, Grid, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
@@ -8,12 +9,7 @@ import { DarkModeSwitch } from 'react-toggle-dark-mode'
 import Swal from 'sweetalert2'
 const inter = Inter({ subsets: ['latin'] })
 
-interface Props {
-    active: string
-    id?: number
-}
-
-const Navigation = (props: Props): JSX.Element => {
+const Navigation = (props: NavigationProps): JSX.Element => {
     const { data: session } = useSession()
     const setTheme = useAppStore(state => state.setTheme)
 

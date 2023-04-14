@@ -20,6 +20,7 @@ const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
 
 const inter = Inter({ subsets: ['latin'] })
 const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <Skeleton /> })
+
 const RegistrationComponent = (): JSX.Element => {
   const initialValues = {
     username: '',
@@ -73,6 +74,7 @@ const RegistrationComponent = (): JSX.Element => {
   const handleClickChangeToLogin = () => {
     signIn()
   }
+  
   return (
     <StyledPaperComponent>
       <Grid container>

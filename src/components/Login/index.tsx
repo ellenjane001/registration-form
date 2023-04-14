@@ -1,5 +1,5 @@
 import { useFormik } from 'formik'
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import StyledPaper from '../StyledComponents/StyledPaper/StyledPaper'
 import { Button, CircularProgress, Grid, Link, Stack, Typography } from '@mui/material'
 import CustomHeader from '../LoginAndRegister/Header/CustomHeader'
@@ -17,7 +17,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/'), { loading: () => <Grid item><CircularProgress /></Grid> })
 const GridItemWithPasswordComponent = dynamic(() => import('@/components/GridItemWithPassword/GridItemWithPassword'), { loading: () => <Grid item><CircularProgress /></Grid> })
-const Login = () => {
+
+const Login = (): JSX.Element => {
     const [failedLogin, setFailedLogin] = useState<number>(3)
     const [allowLogin, setAllowLogin] = useState<boolean>(true)
     const [showComponent, setShowComponent] = useState<boolean>(false)

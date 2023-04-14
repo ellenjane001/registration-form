@@ -1,10 +1,7 @@
 import React from 'react'
 import { FormHelperText } from '@mui/material'
+import { ErrorProps } from '@/types'
 
-type ErrorProps = {
-    message: string | undefined,
-    checker: string | false | undefined
-}
 const Error = (props: ErrorProps): JSX.Element => {
     const { checker, message } = props
     return (

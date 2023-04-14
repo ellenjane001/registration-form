@@ -1,7 +1,8 @@
+import { childrenType } from '@/types'
 import { motion } from 'framer-motion'
 import React from 'react'
 
-const ImageMotion = ({ children }: { children: any }): JSX.Element => {
+const ImageMotion = ({ children }: childrenType): JSX.Element => {
     return (
         <motion.div
             transition={{ duration: .40 }}
