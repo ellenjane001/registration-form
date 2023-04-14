@@ -2,22 +2,17 @@ import axios from "axios"
 import cookie from 'cookie'
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import KeycloakProvider from "next-auth/providers/keycloak"
 import GoogleProvider from "next-auth/providers/google"
+import KeycloakProvider from "next-auth/providers/keycloak"
 
-interface CustomSession{
-    user:{
-        id:string
-        name?:string|undefined|null
-        email?:string|undefined|null
-        image?:string
-    }
-}
 
 export const authOptions: NextAuthOptions = {
     secret: process.env.AUTH_SECRET,
     pages: {
         signIn: '/login'
+    },
+    jwt: {
+        maxAge: 60
     },
     providers: [
         GoogleProvider({
@@ -55,8 +50,9 @@ export const authOptions: NextAuthOptions = {
             clientId: process.env.KEYCLOAK_ID!,
             clientSecret: process.env.KEYCLOAK_SECRET!,
             issuer: process.env.KEYCLOAK_ISSUER,
-          })
+        })
     ],
+    theme: { colorScheme: "auto" },
     callbacks: {
         async jwt({ token, user, account }) {
             if (user) {
@@ -70,10 +66,10 @@ export const authOptions: NextAuthOptions = {
             }
             return token;
         },
-        async session({ session, token, user }:any) {
-            
+        async session({ session, token }: any) {
+
             if (session?.user) {
-                session.user.id= token.id
+                session.user.id = token.id
                 session.user.accessToken = token.accessToken;
             }
 

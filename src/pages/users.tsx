@@ -1,26 +1,28 @@
-import Layout from '@/components/Layout/Layout'
+import NavGrid from '@/components/NavGrid/NavGrid'
 import Navigation from '@/components/Navigation/Navigation'
-import { GetServerSidePropsContext } from 'next'
-import { getSession } from 'next-auth/react'
+import TableCustom from '@/components/Table/TableCustom'
+import Layout from '@/components/Templates/Layout/Layout'
+import { RegistrationType } from '@/types'
+import { Grid, TableCell, TableRow } from '@mui/material'
 import axios from 'axios'
 import cookie from 'cookie'
-import { RegistrationType } from '@/types'
-import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { getSession } from 'next-auth/react'
 
-const users = (props: { user: any, users: [RegistrationType] }) => {
+type UsersPropsType = {
+  user: any, users: [RegistrationType]
+}
+
+const users = (props: UsersPropsType) => {
   return (
     <Layout>
-      <Navigation active='users' />
-      <Grid container justifyContent="center" sx={{padding:'20px'}}>
-        <Grid item><TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Username</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+      <NavGrid>
+        <Navigation active='users' id={props.user.id} />
+      </NavGrid>
+      <Grid item md={12} xs={12}>
+        <Grid container justifyContent="center" sx={{ padding: '20px' }}>
+          <Grid item>
+            <TableCustom>
               {props.users.map(user => (
                 <TableRow
                   key={user.id}
@@ -32,9 +34,8 @@ const users = (props: { user: any, users: [RegistrationType] }) => {
                   <TableCell>{user.username}</TableCell>
                 </TableRow>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            </TableCustom>
+          </Grid>
         </Grid>
       </Grid>
     </Layout>
@@ -43,12 +44,12 @@ const users = (props: { user: any, users: [RegistrationType] }) => {
 
 export default users
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   try {
     const session = await getSession(context)
     const { registration } = cookie.parse(context.req.headers.cookie!)
-
     const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get-all`, { cookie: registration })
+    // const keycloak = await axios.get(``)
     if (!session) {
       return {
         redirect: {
