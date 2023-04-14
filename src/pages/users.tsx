@@ -1,5 +1,7 @@
 import NavGrid from '@/components/NavGrid/NavGrid'
 import Navigation from '@/components/Navigation/Navigation'
+import StyledDiv from '@/components/StyledComponents/StyledDiv'
+import StyledTableRow from '@/components/StyledComponents/StyledTableRow'
 import Layout from '@/components/Templates/Layout/Layout'
 import TableCustom from '@/components/Templates/Table/TableCustom'
 import { RegistrationType } from '@/types'
@@ -23,15 +25,12 @@ const users = (props: UsersPropsType) => {
           <Grid item>
             <TableCustom>
               {props.users.map(user => (
-                <TableRow
-                  key={user.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
+                <StyledTableRow key={user.id}>
+                  <StyledDiv component="th" scope="row">
                     {user.id}
-                  </TableCell>
+                  </StyledDiv>
                   <TableCell>{user.username}</TableCell>
-                </TableRow>
+                </StyledTableRow>
               ))}
             </TableCustom>
           </Grid>
