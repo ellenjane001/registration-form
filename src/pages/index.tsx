@@ -1,8 +1,9 @@
 import ImageMotion from '@/components/ImageMotion/ImageMotion'
-import LoginAndRegisterButton from '@/components/LoginAndRegisterButton/LoginAndRegisterButton'
+import LoginAndRegisterButton from '@/components/LoginAndRegister/CustomButtonGroup'
+import NavGrid from '@/components/NavGrid/NavGrid'
 import StyledIElement from '@/components/StyledComponents/StyledIElement/StyledIElement'
 import Layout from '@/components/Templates/Layout/Layout'
-import { CircularProgress, Grid, Skeleton } from '@mui/material'
+import { Grid, Skeleton } from '@mui/material'
 import axios from 'axios'
 import { GetStaticProps } from 'next'
 import { useSession } from 'next-auth/react'
@@ -10,10 +11,9 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import People from '../assets/people.png'
-import NavGrid from '@/components/NavGrid/NavGrid'
 
 const NavigationComponent = dynamic(
-  () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
+  () => import('@/components/Navigation/Navigation'), { loading: () => <Skeleton variant="rounded" width="100%" height={60} />}
 )
 export default function Home({ content }: { content: string }): JSX.Element {
   const [showComponent, setShowComponent] = useState<boolean>(true);

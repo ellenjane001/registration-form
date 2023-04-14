@@ -7,7 +7,7 @@ import KeycloakProvider from "next-auth/providers/keycloak"
 
 
 export const authOptions: NextAuthOptions = {
-    secret: process.env.AUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/login'
     },
@@ -28,9 +28,9 @@ export const authOptions: NextAuthOptions = {
                 const { registration } = cookie.parse(req.headers!.cookie)
                 try {
                     const u = await axios.post(`${process.env.NEXT_PUBLIC_API}users/login`, ({ ...credentials, cookies: registration }))
-                    const { email, first_name, middle_name, last_name, id } = u.data.user
+                    const { email, firstName, lastName, id } = u.data
                     const user = {
-                        name: `${first_name} ${middle_name} ${last_name}`,
+                        name: `${firstName} ${lastName}`,
                         email: email,
                         image: null,
                         access_token: u.data.access_token,

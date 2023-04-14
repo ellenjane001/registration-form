@@ -1,19 +1,18 @@
 import Error from '@/components/Error/Error'
 import GridWithFormControl from '@/components/GridWithFormControl/GridWithFormControl'
+import NavGrid from '@/components/NavGrid/NavGrid'
 import Layout from '@/components/Templates/Layout/Layout'
-import { ContactType, RegistrationType } from '@/types'
+import { ContactType } from '@/types'
 import { Button, CircularProgress, FormControl, Grid, InputLabel, OutlinedInput, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
-import cookie from 'cookie'
 import { useFormik } from 'formik'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import { ContactSchema } from '../Schema/index'
-import NavGrid from '@/components/NavGrid/NavGrid'
 
 const NavigationComponent = dynamic(
   () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
@@ -25,8 +24,7 @@ interface userDataType {
 }
 const inter = Inter({ subsets: ['latin'] })
 
-const Contact = ({ data, user }: { data: RegistrationType, user: userDataType }) => {
-
+const Contact = ({ user }: { user: userDataType }) => {
   const [userData, setUserData] = useState<userDataType>({
     name: '', email: '', id: 0
   })
@@ -35,8 +33,7 @@ const Contact = ({ data, user }: { data: RegistrationType, user: userDataType })
   const initialValues = {
     name: userData ? userData.name : '',
     message: '',
-    email: userData ? userData.email : '',
-    number: data ? data.number : ''
+    email: userData ? userData.email : ''
   }
 
   const userSetter = useCallback(() => {
@@ -99,7 +96,6 @@ const Contact = ({ data, user }: { data: RegistrationType, user: userDataType })
                       <Grid container direction="column" spacing={2}>
                         <GridWithFormControl name="name" handleChange={formik.handleChange} value={formik.values.name} label="Your Name" message={formik.errors.name} checker={formik.touched.name && formik.errors.name} handleBlur={formik.handleBlur} />
                         <GridWithFormControl name="email" handleChange={formik.handleChange} value={formik.values.email} label="Email" message={formik.errors.email} checker={formik.touched.email && formik.errors.email} handleBlur={formik.handleBlur} />
-                        <GridWithFormControl name="number" handleChange={formik.handleChange} value={formik.values.number} label="Phone Number" message={formik.errors.number} checker={formik.touched.number && formik.errors.number} handleBlur={formik.handleBlur} />
                       </Grid>
                     </Grid>
                     <Grid item md={6} xs={12}>
@@ -129,10 +125,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   try {
     const session = await getSession(context) as any
-    const { registration } = cookie.parse(context.req.headers.cookie!)
-    const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get`, { cookie: registration, id: session?.user?.id })
     return {
-      props: { ...session, ...result.data }
+      props: { ...session }
     }
   } catch (e) {
     console.log((e as Error).message)

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const LoginAndRegHeader = (props: { text: string }): JSX.Element => {
+const CustomHeader = (props: { text: string }): JSX.Element => {
     const { text } = props
     const router = useRouter()
     const handleClickReturnHome = () => {
@@ -25,4 +25,4 @@ const LoginAndRegHeader = (props: { text: string }): JSX.Element => {
     )
 }
 
-export default LoginAndRegHeader
+export default CustomHeader

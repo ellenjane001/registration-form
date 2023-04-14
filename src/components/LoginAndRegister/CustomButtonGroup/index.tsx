@@ -3,7 +3,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-const LoginAndRegisterButton = (): JSX.Element => {
+const CustomButtonGroup = (): JSX.Element => {
     const router = useRouter()
     const handleClickDisplayLogin = () => {
         signIn()
@@ -21,4 +21,4 @@ const LoginAndRegisterButton = (): JSX.Element => {
     )
 }
 
-export default LoginAndRegisterButton
+export default CustomButtonGroup
