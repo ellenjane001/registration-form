@@ -1,27 +1,25 @@
+import styles from '@/styles/Layout.module.css'
+import { Grid, Paper, Skeleton } from '@mui/material'
+import dynamic from 'next/dynamic'
 import React from 'react'
 import Header from '../Header/Header'
-import styles from '@/styles/Layout.module.css'
-import { CircularProgress, Grid, Paper } from '@mui/material'
-import dynamic from 'next/dynamic'
 
 interface LayoutProps {
     title?: string
     children?: any
 }
 
-const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <CircularProgress /> })
+const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <Skeleton /> })
 
-const Layout: React.FC<LayoutProps> = ({ children, title }): JSX.Element => {
+const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
     return (
         <>
             <Header />
             <main className={styles.main}>
                 <StyledPaperComponent>
-                    <Paper sx={{ padding: '1rem' }} elevation={0}>
-                        <Grid container direction="column" alignItems="center" spacing={2} className='font'>
-                            {children}
-                        </Grid>
-                    </Paper >
+                    <Grid container direction="column" alignItems="center" spacing={2} className='font'>
+                        {children}
+                    </Grid>
                 </StyledPaperComponent>
             </main>
         </>

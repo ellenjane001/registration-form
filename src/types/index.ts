@@ -13,7 +13,7 @@ export type RegistrationType = {
 export type ContactType={
     name:string
     email:string
-    number:string
+    number?:string
     message:string
 }
 

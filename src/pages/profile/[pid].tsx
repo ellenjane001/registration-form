@@ -92,23 +92,16 @@ export default Profile
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     try {
         const session = await getSession(context) as any
-        const { registration } = cookie.parse(context.req.headers.cookie!)
-
-        if (!session) {
+        if (!session)
             return {
                 redirect: {
                     destination: `${process.env.NEXTAUTH_URL}/login`,
                     permanent: false,
                 },
             }
-        }
+        else
+            return { props: { ...session } }
 
-        const result = await axios.post(`${process.env.NEXT_PUBLIC_API}users/get`, { cookie: registration, id: session?.user?.id })
-        const { data } = result
-
-        return {
-            props: { ...session, ...data }
-        }
 
     } catch (e) {
         return {

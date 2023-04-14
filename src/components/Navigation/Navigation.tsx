@@ -93,7 +93,7 @@ const Navigation = (props: Props): JSX.Element => {
                 </Grid>
             </Grid>
             {session &&
-                <Grid item md={4} xs={4}>
+                <Grid item md={4} xs={4} sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-start" }}>
                     <Button variant="contained" onClick={handleClickLogout}> Logout</Button>
                 </Grid>}
         </Grid>
