@@ -98,3 +98,12 @@ a {
     color-scheme: dark;
   }
 }
+
+.dark-theme {
+  background-color: #2b2b2b !important;
+  color: #ffffff !important;
+}
+
+.dark-font {
+  color: #2b2b2b !important;
+}

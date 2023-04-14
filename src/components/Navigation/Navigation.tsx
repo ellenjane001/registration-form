@@ -1,12 +1,12 @@
 import { NavigationProps } from '@/types'
 import useAppStore from '@/utils/AppStore'
+import { swalLogout } from '@/utils/swal'
 import { Button, Grid, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useCallback, useEffect } from 'react'
 import { DarkModeSwitch } from 'react-toggle-dark-mode'
-import Swal from 'sweetalert2'
 const inter = Inter({ subsets: ['latin'] })
 
 const Navigation = (props: NavigationProps): JSX.Element => {
@@ -35,25 +35,12 @@ const Navigation = (props: NavigationProps): JSX.Element => {
             setTheme(true)
         }
     }
-    const handleClickLogout = () => {
-        Swal.fire({
-            title: 'Logout',
-            text: 'Do you want to logout?',
-            icon: 'question',
-            showConfirmButton: true,
-            showCancelButton: true,
-            allowOutsideClick: false,
-            confirmButtonColor: '#1565c0'
-        }).then(result => {
-            if (result.isConfirmed) {
-                signOut({
-                    callbackUrl: `${window.location.origin}/login`
-                })
-            }
-        })
-    }
+
     const theme = useAppStore<boolean>(state => state.theme)
 
+    const handleClickLogout = () => {
+        swalLogout({theme})
+    }
     return (
         <Grid container spacing={2}>
             <Grid item md={8} xs={8}>

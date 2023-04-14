@@ -1,5 +1,7 @@
-import axios from 'axios';
+import { Http } from '@mui/icons-material';
+import axios, { HttpStatusCode } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { ApiError } from 'next/dist/server/api-utils';
 type Data = {
   message?: string
 }
@@ -18,10 +20,12 @@ export default async function login(req: NextApiRequest, res: NextApiResponse<Da
         method: "GET",
         headers: { "Authorization": `Bearer ${requestJWT.data.access_token}` }
       })
-      return res.status(200).json({ message: 'logged in', ...userCheck.data[0] })
+      if (userCheck.data.length > 0)
+        return res.status(200).json({ message: 'logged in', ...userCheck.data[0] })
+      else
+        throw new ApiError(HttpStatusCode.BadRequest, "Account not found")
     }
-    else
-      throw new Error('Account not found')
+
 
     // return res.status(400)
     // const regCookies = JSON.parse(decodeBase64(req.body.cookies))

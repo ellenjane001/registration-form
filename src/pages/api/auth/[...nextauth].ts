@@ -29,6 +29,7 @@ export const authOptions: NextAuthOptions = {
                 try {
                     const u = await axios.post(`${process.env.NEXT_PUBLIC_API}users/login`, ({ ...credentials, cookies: registration }))
                     const { email, firstName, lastName, id } = u.data
+                    
                     const user = {
                         name: `${firstName} ${lastName}`,
                         email: email,

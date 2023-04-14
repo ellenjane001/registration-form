@@ -24,7 +24,7 @@ const Login = (): JSX.Element => {
     const [showComponent, setShowComponent] = useState<boolean>(false)
     const router = useRouter()
     const setTheme = useAppStore(state => state.setTheme)
-
+    const theme = useAppStore<boolean>(state => state.theme)
     useEffect(() => {
         setShowComponent(true)
         if (localStorage.getItem("theme") == "true") {
@@ -46,7 +46,7 @@ const Login = (): JSX.Element => {
                 if (getCookie('locked')) {
                     if (username === getCookie('locked')) {
                         setAllowLogin(false)
-                        swalWithErrorIcon({ message: `Your Account is disabled! Please login again after 30 minutes` })
+                        swalWithErrorIcon({ message: `Your Account is disabled! Please login again after 30 minutes` ,theme})
                     }
                 } else {
                     setAllowLogin(true)
@@ -65,12 +65,12 @@ const Login = (): JSX.Element => {
                             const expireTime = new Date(currentTime.getTime() + 20 * 1000); //20 seconds
 
                             if (failedLogin > 0) {
-                                swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found' })
+                                swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found',theme })
                                 setFailedLogin(prevFailedLogin => prevFailedLogin - 1)
                             }
                             else if (failedLogin === 0) {
                                 setCookie('locked', username, { expires: expireTime })
-                                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes` })
+                                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes`,theme:theme })
                                 setAllowLogin(false)
                             }
                         }
