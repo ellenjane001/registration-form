@@ -15,7 +15,7 @@ import GoogleButton from 'react-google-button'
 import useAppStore from '@/utils/AppStore'
 const inter = Inter({ subsets: ['latin'] })
 
-const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/GridWithFormControl'), { loading: () => <Grid item><CircularProgress /></Grid> })
+const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/'), { loading: () => <Grid item><CircularProgress /></Grid> })
 const GridItemWithPasswordComponent = dynamic(() => import('@/components/GridItemWithPassword/GridItemWithPassword'), { loading: () => <Grid item><CircularProgress /></Grid> })
 const Login = () => {
     const [failedLogin, setFailedLogin] = useState<number>(3)
@@ -87,7 +87,7 @@ const Login = () => {
                     <form onSubmit={formik.handleSubmit} style={{ padding: "10px" }} action="/api/auth/callback/credentials">
                         <Grid container direction="column" spacing={1}>
                             {showComponent && <>
-                                <GridWithFormControlComponent name="username" handleChange={formik.handleChange} value={formik.values.username} handleBlur={formik.handleBlur} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
+                                <GridWithFormControlComponent md={4} name="username" handleChange={formik.handleChange} value={formik.values.username} handleBlur={formik.handleBlur} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
                                 <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="passzword" name='password' label='Password' />
                             </>}
                         </Grid>

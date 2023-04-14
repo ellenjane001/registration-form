@@ -1,5 +1,5 @@
 import Error from '@/components/Error/Error'
-import GridWithFormControl from '@/components/GridWithFormControl/GridWithFormControl'
+import GridWithFormControl from '@/components/GridWithFormControl/'
 import NavGrid from '@/components/NavGrid/NavGrid'
 import Layout from '@/components/Templates/Layout/Layout'
 import { ContactType } from '@/types'
@@ -90,22 +90,14 @@ const Contact = ({ user }: { user: userDataType }) => {
           <Grid item>
             <form onSubmit={formik.handleSubmit}>
               <Grid container direction="column" spacing={2}>
+                <GridWithFormControl name="name" handleChange={formik.handleChange} value={formik.values.name} label="Your Name" message={formik.errors.name} checker={formik.touched.name && formik.errors.name} handleBlur={formik.handleBlur} md={12} />
+                <GridWithFormControl name="email" handleChange={formik.handleChange} value={formik.values.email} label="Email" message={formik.errors.email} checker={formik.touched.email && formik.errors.email} handleBlur={formik.handleBlur} md={12} />
                 <Grid item>
-                  <Grid container spacing={2}>
-                    <Grid item md={6} xs={12}>
-                      <Grid container direction="column" spacing={2}>
-                        <GridWithFormControl name="name" handleChange={formik.handleChange} value={formik.values.name} label="Your Name" message={formik.errors.name} checker={formik.touched.name && formik.errors.name} handleBlur={formik.handleBlur} />
-                        <GridWithFormControl name="email" handleChange={formik.handleChange} value={formik.values.email} label="Email" message={formik.errors.email} checker={formik.touched.email && formik.errors.email} handleBlur={formik.handleBlur} />
-                      </Grid>
-                    </Grid>
-                    <Grid item md={6} xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel htmlFor='message'>Message</InputLabel>
-                        <OutlinedInput id='message' name='message' label="Message" onChange={formik.handleChange} value={formik.values.message} multiline rows={7} />
-                        <Error message={formik.errors.message} checker={formik.touched.message && formik.errors.message} />
-                      </FormControl>
-                    </Grid>
-                  </Grid>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor='message'>Message</InputLabel>
+                    <OutlinedInput id='message' name='message' label="Message" onChange={formik.handleChange} value={formik.values.message} multiline rows={4} />
+                    <Error message={formik.errors.message} checker={formik.touched.message && formik.errors.message} />
+                  </FormControl>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' size='large' type="submit" fullWidth>Send</Button>
