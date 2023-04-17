@@ -82,7 +82,7 @@ const Contact = ({ user }: propsUserDataType) => {
                     </Grid>
                     <Grid item>
                         <form onSubmit={formik.handleSubmit}>
-                            <Grid container direction="column" spacing={2}>
+                            <Grid container direction="column" spacing={1}>
                                 <GridWithFormControl name="name" handleChange={formik.handleChange} value={formik.values.name} label="Your Name" message={formik.errors.name} checker={formik.touched.name && formik.errors.name} handleBlur={formik.handleBlur} md={12} />
                                 <GridWithFormControl name="email" handleChange={formik.handleChange} value={formik.values.email} label="Email" message={formik.errors.email} checker={formik.touched.email && formik.errors.email} handleBlur={formik.handleBlur} md={12} />
                                 <Grid item>

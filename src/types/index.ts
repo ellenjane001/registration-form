@@ -89,15 +89,10 @@ export interface propsUserDataType {
         email: string,
         id: number
     }
-
-
 }
+
 export interface userDataType {
-  
         name: string,
         email: string,
         id: number
-   
-
-
 }

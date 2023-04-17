@@ -22,5 +22,5 @@ export const LoginSchema = Yup.object().shape({
 export const ContactSchema = Yup.object().shape({
   name: Yup.string().trim().required('Required'),
   message: Yup.string().trim().required('Required'),
-  email: Yup.string().trim().required('Required')
+  email: Yup.string().trim().email('Invalid email address').required('Required')
 })
