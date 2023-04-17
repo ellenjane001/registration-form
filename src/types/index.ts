@@ -83,3 +83,21 @@ export type CustomHeaderType = {
 export type ThemeType = {
     theme: boolean
 }
+export interface propsUserDataType {
+    user: {
+        name: string,
+        email: string,
+        id: number
+    }
+
+
+}
+export interface userDataType {
+  
+        name: string,
+        email: string,
+        id: number
+   
+
+
+}

@@ -1,11 +1,11 @@
 import CustomLayout from '@/components/LoginAndRegister/Layout'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Skeleton } from '@mui/material'
 import type { GetServerSideProps, GetServerSidePropsContext } from "next"
 import { getSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-const LoginComponent = dynamic(() => import('@/components/Login/'), { loading: () => <CircularProgress /> })
+const LoginComponent = dynamic(() => import('@/components/Login/'), { loading: () => <CircularProgress/> })
 
 const Login = () => {
     const [showComponent, setShowComponent] = useState<boolean>(false)

@@ -5,41 +5,16 @@ import { Button, Grid, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useCallback, useEffect } from 'react'
-import { DarkModeSwitch } from 'react-toggle-dark-mode'
+import DarkMode from '../DarkMode'
 const inter = Inter({ subsets: ['latin'] })
 
 const Navigation = (props: NavigationProps): JSX.Element => {
     const { data: session } = useSession()
-    const setTheme = useAppStore(state => state.setTheme)
-
-    const themeSetter = useCallback(() => {
-        if (localStorage.getItem("theme") == "true") {
-            setTheme(true)
-        } else {
-            setTheme(false)
-        }
-    }, [])
-
-    useEffect(() => {
-        themeSetter()
-    }, [themeSetter])
-
-    const handleChangeDarkMode = () => {
-        if (localStorage.getItem("theme") == "true") {
-            localStorage.setItem("theme", "false")
-            setTheme(false)
-        }
-        else {
-            localStorage.setItem("theme", "true")
-            setTheme(true)
-        }
-    }
 
     const theme = useAppStore<boolean>(state => state.theme)
 
     const handleClickLogout = () => {
-        swalLogout({theme})
+        swalLogout({ theme })
     }
     return (
         <Grid container spacing={2}>
@@ -66,12 +41,7 @@ const Navigation = (props: NavigationProps): JSX.Element => {
                         </Link>
                     </Grid>}
                     <Grid item xs="auto">
-                        <DarkModeSwitch
-                            style={{ marginBottom: '2rem' }}
-                            checked={theme}
-                            onChange={handleChangeDarkMode}
-                            size={25}
-                        />
+                        <DarkMode />
                     </Grid>
                 </Grid>
             </Grid>

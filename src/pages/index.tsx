@@ -1,7 +1,7 @@
 import ImageMotion from '@/components/ImageMotion/ImageMotion'
 import LoginAndRegisterButton from '@/components/LoginAndRegister/CustomButtonGroup'
 import NavGrid from '@/components/NavGrid/NavGrid'
-import StyledIElement from '@/components/StyledComponents/StyledIElement/StyledIElement'
+import { StyledIElement } from '@/components/StyledComponents'
 import Layout from '@/components/Templates/Layout/Layout'
 import { CircularProgress, Grid, Skeleton } from '@mui/material'
 import axios from 'axios'

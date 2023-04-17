@@ -28,7 +28,6 @@ const GridItemWithPassword = ({ handleChange, value, message, checker, name, id,
                         </IconButton>
                     </InputAdornment>
                 } />
-                <Error message={message} checker={checker} />
             </FormControl>
         </Grid>
     )

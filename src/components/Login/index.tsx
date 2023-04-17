@@ -1,23 +1,22 @@
-import { useFormik } from 'formik'
-import React, { useState, useEffect } from 'react'
-import StyledPaper from '../StyledComponents/StyledPaper/StyledPaper'
-import { Button, CircularProgress, Grid, Link, Stack, Typography } from '@mui/material'
-import CustomHeader from '../LoginAndRegister/Header/CustomHeader'
-import { LoginType } from '@/types'
 import { LoginSchema } from '@/Schema'
-import { getCookie, setCookie } from 'cookies-next'
-import { swalWithErrorIcon, swalwithWarningIcon } from '@/utils/swal'
-import { getSession, signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic'
-import { Inter } from '@next/font/google'
-import GoogleButton from 'react-google-button'
+import { LoginType } from '@/types'
 import useAppStore from '@/utils/AppStore'
-import StyledPaper2 from '../StyledComponents/StyledPaper2.0'
+import { swalWithErrorIcon, swalwithWarningIcon } from '@/utils/swal'
+import { Button, CircularProgress, Grid, Link, Skeleton, Stack, Typography } from '@mui/material'
+import { Inter } from '@next/font/google'
+import { getCookie, setCookie } from 'cookies-next'
+import { useFormik } from 'formik'
+import { getSession, signIn } from 'next-auth/react'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import GoogleButton from 'react-google-button'
+import CustomHeader from '../LoginAndRegister/Header/CustomHeader'
+import { StyledPaper2 } from '../StyledComponents'
 const inter = Inter({ subsets: ['latin'] })
 
-const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/'), { loading: () => <Grid item><CircularProgress /></Grid> })
-const GridItemWithPasswordComponent = dynamic(() => import('@/components/GridItemWithPassword/GridItemWithPassword'), { loading: () => <Grid item><CircularProgress /></Grid> })
+const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/'), { loading: () => <Grid item><Skeleton variant="rectangular" /></Grid> })
+const GridItemWithPasswordComponent = dynamic(() => import('@/components/GridItemWithPassword/GridItemWithPassword'), { loading: () => <Grid item><Skeleton variant="rectangular" /></Grid> })
 
 const Login = (): JSX.Element => {
     const [failedLogin, setFailedLogin] = useState<number>(3)
@@ -47,7 +46,7 @@ const Login = (): JSX.Element => {
                 if (getCookie('locked')) {
                     if (username === getCookie('locked')) {
                         setAllowLogin(false)
-                        swalWithErrorIcon({ message: `Your Account is disabled! Please login again after 30 minutes` ,theme})
+                        swalWithErrorIcon({ message: `Your Account is disabled! Please login again after 30 minutes`, theme })
                     }
                 } else {
                     setAllowLogin(true)
@@ -66,12 +65,12 @@ const Login = (): JSX.Element => {
                             const expireTime = new Date(currentTime.getTime() + 20 * 1000); //20 seconds
 
                             if (failedLogin > 0) {
-                                swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found',theme })
+                                swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found', theme })
                                 setFailedLogin(prevFailedLogin => prevFailedLogin - 1)
                             }
                             else if (failedLogin === 0) {
                                 setCookie('locked', username, { expires: expireTime })
-                                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes`,theme:theme })
+                                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes`, theme: theme })
                                 setAllowLogin(false)
                             }
                         }

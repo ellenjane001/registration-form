@@ -9,7 +9,7 @@ interface LayoutProps {
     children?: any
 }
 
-const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <CircularProgress /> })
+const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents').then(index => index.StyledPaper), { loading: () => <CircularProgress /> })
 
 const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
     return (

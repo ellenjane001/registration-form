@@ -1,6 +1,6 @@
 import ImageMotion from '@/components/ImageMotion/ImageMotion'
 import Layout from '@/components/Templates/Layout/Layout'
-import StyledIElement from '@/components/StyledComponents/StyledIElement/StyledIElement'
+import { StyledIElement } from '@/components/StyledComponents'
 import styles from '@/styles/Profile.module.css'
 import { RegistrationType } from '@/types'
 import { Avatar, Button, CircularProgress, Grid, Paper, Typography } from '@mui/material'

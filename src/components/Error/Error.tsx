@@ -1,6 +1,6 @@
-import React from 'react'
-import { FormHelperText } from '@mui/material'
 import { ErrorProps } from '@/types'
+import { FormHelperText, Skeleton } from '@mui/material'
+import { StyledSkeleton } from '../StyledComponents'
 
 const Error = (props: ErrorProps): JSX.Element => {
     const { checker, message } = props
@@ -8,7 +8,7 @@ const Error = (props: ErrorProps): JSX.Element => {
         <>
             {checker ? (
                 <FormHelperText error>{message}</FormHelperText>
-            ) : null}
+            ) : <FormHelperText><StyledSkeleton animation={false}/></FormHelperText>}
         </>
     )
 }
