@@ -1,5 +1,5 @@
 import styles from '@/styles/Layout.module.css'
-import { Grid, Paper, Skeleton } from '@mui/material'
+import { CircularProgress, Grid, Paper, Skeleton } from '@mui/material'
 import dynamic from 'next/dynamic'
 import React from 'react'
 import Header from '../Header/Header'
@@ -9,7 +9,7 @@ interface LayoutProps {
     children?: any
 }
 
-const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <Skeleton /> })
+const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <CircularProgress /> })
 
 const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
     return (

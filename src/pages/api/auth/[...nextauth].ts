@@ -25,9 +25,8 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req): Promise<any> {
-                const { registration } = cookie.parse(req.headers!.cookie)
                 try {
-                    const u = await axios.post(`${process.env.NEXT_PUBLIC_API}users/login`, ({ ...credentials, cookies: registration }))
+                    const u = await axios.post(`${process.env.NEXT_PUBLIC_API}users/login`, ({ ...credentials }))
                     const { email, firstName, lastName, id } = u.data
                     
                     const user = {

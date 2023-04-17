@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic'
 import { Inter } from '@next/font/google'
 import GoogleButton from 'react-google-button'
 import useAppStore from '@/utils/AppStore'
+import StyledPaper2 from '../StyledComponents/StyledPaper2.0'
 const inter = Inter({ subsets: ['latin'] })
 
 const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/'), { loading: () => <Grid item><CircularProgress /></Grid> })
@@ -81,7 +82,7 @@ const Login = (): JSX.Element => {
         }
     })
     return (
-        <StyledPaper>
+        <StyledPaper2>
             <Grid container direction="column">
                 <CustomHeader text="Sign In" />
                 <Grid item sx={{ textAlign: 'center' }} md={12}>
@@ -114,7 +115,7 @@ const Login = (): JSX.Element => {
                     </Grid>
                 </Grid>
             </Grid>
-        </StyledPaper>
+        </StyledPaper2>
     )
 }
 

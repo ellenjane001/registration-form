@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, FormControl, Grid, Link, Skeleton, Stack, Typography } from '@mui/material'
+import { Button, ButtonGroup, CircularProgress, FormControl, Grid, Link, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
 import { useFormik } from 'formik'
@@ -19,7 +19,7 @@ const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
 });
 
 const inter = Inter({ subsets: ['latin'] })
-const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <Skeleton /> })
+const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper2.0'), { loading: () => <CircularProgress /> })
 
 const RegistrationComponent = (): JSX.Element => {
   const initialValues = {
