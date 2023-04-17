@@ -2,16 +2,8 @@ import React, { useState } from 'react'
 import { Grid, FormControl, InputLabel, OutlinedInput, IconButton, InputAdornment } from '@mui/material'
 import Error from '../Error/Error'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
+import { GridItemWithPasswordType } from '@/types'
 
-interface GridItemWithPasswordType {
-    handleChange: any,
-    value: string | undefined,
-    message: any,
-    checker: any,
-    name: string,
-    id: string,
-    label: string
-}
 
 const GridItemWithPassword = ({ handleChange, value, message, checker, name, id, label }: GridItemWithPasswordType): JSX.Element => {
     const [showPassword, setShowPassword] = useState<boolean>(false)

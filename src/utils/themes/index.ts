@@ -11,4 +11,4 @@ const lightTheme = createTheme({
     },
 });
 
-export { darkTheme, lightTheme }
+export { darkTheme, lightTheme };

@@ -1,3 +1,4 @@
+import { CustomHeaderType } from '@/types'
 import { Home } from '@mui/icons-material'
 import { Grid, IconButton } from '@mui/material'
 import { Inter } from '@next/font/google'
@@ -5,8 +6,7 @@ import { useRouter } from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const CustomHeader = (props: { text: string }): JSX.Element => {
-    const { text } = props
+const CustomHeader = ({ text }: CustomHeaderType): JSX.Element => {
     const router = useRouter()
     const handleClickReturnHome = () => {
         router.push('/')

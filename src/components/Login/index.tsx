@@ -1,5 +1,5 @@
 import { useFormik } from 'formik'
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import StyledPaper from '../StyledComponents/StyledPaper/StyledPaper'
 import { Button, CircularProgress, Grid, Link, Stack, Typography } from '@mui/material'
 import CustomHeader from '../LoginAndRegister/Header/CustomHeader'
@@ -13,17 +13,19 @@ import dynamic from 'next/dynamic'
 import { Inter } from '@next/font/google'
 import GoogleButton from 'react-google-button'
 import useAppStore from '@/utils/AppStore'
+import StyledPaper2 from '../StyledComponents/StyledPaper2.0'
 const inter = Inter({ subsets: ['latin'] })
 
-const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/GridWithFormControl'), { loading: () => <Grid item><CircularProgress /></Grid> })
+const GridWithFormControlComponent = dynamic(() => import('@/components/GridWithFormControl/'), { loading: () => <Grid item><CircularProgress /></Grid> })
 const GridItemWithPasswordComponent = dynamic(() => import('@/components/GridItemWithPassword/GridItemWithPassword'), { loading: () => <Grid item><CircularProgress /></Grid> })
-const Login = () => {
+
+const Login = (): JSX.Element => {
     const [failedLogin, setFailedLogin] = useState<number>(3)
     const [allowLogin, setAllowLogin] = useState<boolean>(true)
     const [showComponent, setShowComponent] = useState<boolean>(false)
     const router = useRouter()
     const setTheme = useAppStore(state => state.setTheme)
-
+    const theme = useAppStore<boolean>(state => state.theme)
     useEffect(() => {
         setShowComponent(true)
         if (localStorage.getItem("theme") == "true") {
@@ -45,7 +47,7 @@ const Login = () => {
                 if (getCookie('locked')) {
                     if (username === getCookie('locked')) {
                         setAllowLogin(false)
-                        swalWithErrorIcon({ message: `Your Account is disabled! Please login again after 30 minutes` })
+                        swalWithErrorIcon({ message: `Your Account is disabled! Please login again after 30 minutes` ,theme})
                     }
                 } else {
                     setAllowLogin(true)
@@ -64,12 +66,12 @@ const Login = () => {
                             const expireTime = new Date(currentTime.getTime() + 20 * 1000); //20 seconds
 
                             if (failedLogin > 0) {
-                                swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found' })
+                                swalwithWarningIcon({ message: 'Please enter a different account or click the register link', title: 'Account not Found',theme })
                                 setFailedLogin(prevFailedLogin => prevFailedLogin - 1)
                             }
                             else if (failedLogin === 0) {
                                 setCookie('locked', username, { expires: expireTime })
-                                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes` })
+                                swalWithErrorIcon({ message: `Your Account has been disabled! Please login again after 30 minutes`,theme:theme })
                                 setAllowLogin(false)
                             }
                         }
@@ -80,14 +82,14 @@ const Login = () => {
         }
     })
     return (
-        <StyledPaper>
+        <StyledPaper2>
             <Grid container direction="column">
                 <CustomHeader text="Sign In" />
                 <Grid item sx={{ textAlign: 'center' }} md={12}>
                     <form onSubmit={formik.handleSubmit} style={{ padding: "10px" }} action="/api/auth/callback/credentials">
                         <Grid container direction="column" spacing={1}>
                             {showComponent && <>
-                                <GridWithFormControlComponent name="username" handleChange={formik.handleChange} value={formik.values.username} handleBlur={formik.handleBlur} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
+                                <GridWithFormControlComponent md={4} name="username" handleChange={formik.handleChange} value={formik.values.username} handleBlur={formik.handleBlur} label="Username" message={formik.errors.username} checker={formik.touched.username && formik.errors.username} />
                                 <GridItemWithPasswordComponent handleChange={formik.handleChange} value={formik.values.password} message={formik.errors.password} checker={formik.touched.password && formik.errors.password} id="passzword" name='password' label='Password' />
                             </>}
                         </Grid>
@@ -113,7 +115,7 @@ const Login = () => {
                     </Grid>
                 </Grid>
             </Grid>
-        </StyledPaper>
+        </StyledPaper2>
     )
 }
 

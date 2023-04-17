@@ -1,7 +1,7 @@
+import { childrenType } from '@/types'
 import { Grid } from '@mui/material'
-import React, { ReactNode } from 'react'
 
-const NavGrid = ({ children }: { children: ReactNode }) => {
+const NavGrid = ({ children }: childrenType): JSX.Element => {
     return (
         <Grid item width="100%">{children}</Grid>
     )

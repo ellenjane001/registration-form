@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, FormControl, Grid, Link, Skeleton, Stack, Typography } from '@mui/material'
+import { Button, ButtonGroup, CircularProgress, FormControl, Grid, Link, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
 import { useFormik } from 'formik'
@@ -11,15 +11,16 @@ import { RegistrationType } from '../../types/index'
 import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
 import GridItemWithPassword from '../GridItemWithPassword/GridItemWithPassword'
-import GridWithFormControl from '../GridWithFormControl/GridWithFormControl'
-import LoginAndRegHeader from '../LoginAndRegister/Header/CustomHeader'
+import GridWithFormControl from '../GridWithFormControl/'
+import CustomHeader from '../LoginAndRegister/Header/CustomHeader'
 
 const PasswordChecklist = dynamic(() => import('react-password-checklist'), {
   ssr: false,
 });
 
 const inter = Inter({ subsets: ['latin'] })
-const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper/StyledPaper'), { loading: () => <Skeleton /> })
+const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents/StyledPaper2.0'), { loading: () => <CircularProgress /> })
+
 const RegistrationComponent = (): JSX.Element => {
   const initialValues = {
     username: '',
@@ -73,15 +74,16 @@ const RegistrationComponent = (): JSX.Element => {
   const handleClickChangeToLogin = () => {
     signIn()
   }
+  
   return (
     <StyledPaperComponent>
       <Grid container>
-        <LoginAndRegHeader text="Registration Form" />
+        <CustomHeader text="Registration Form" />
         <form onSubmit={formik.handleSubmit} >
           <Grid container alignItems="center" justifyContent="center" sx={{ padding: '10px' }} spacing={2}>
             {/* firstname */}
             <GridWithFormControl name='first_name' value={formik.values.first_name} handleChange={formik.handleChange} handleBlur={formik.handleBlur} label='FirstName' message={formik
-              .errors.first_name} checker={formik.touched.first_name && formik.errors.first_name} />
+              .errors.first_name} checker={formik.touched.first_name && formik.errors.first_name} md={4} />
             {/* middle name */}
             <Grid item md={4} xs={12}>
               <FormControl fullWidth>

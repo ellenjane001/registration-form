@@ -4,8 +4,9 @@ import { darkTheme, lightTheme } from '@/utils/themes'
 import { ThemeProvider } from '@emotion/react'
 import React from 'react'
 import styles from '../../../styles/Login.module.css'
+import { childrenType } from '@/types'
 
-const CustomLayout = ({ children }: { children: any }) => {
+const CustomLayout = ({ children }: childrenType) => {
     const theme = useAppStore(state => state.theme)
     return (
         <>

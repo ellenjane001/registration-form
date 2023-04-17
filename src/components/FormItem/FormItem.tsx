@@ -1,12 +1,7 @@
+import { FormItemProps } from '@/types'
 import { InputLabel, OutlinedInput } from '@mui/material'
 
-type Props = {
-    name: string
-    value: string
-    handleChange: any
-    label: string
-}
-const FormItem = ({ name, handleChange, value, label }: Props): JSX.Element => {
+const FormItem = ({ name, handleChange, value, label }: FormItemProps): JSX.Element => {
     return (
         <>
             <InputLabel htmlFor={name}>{`${label}`}</InputLabel>
