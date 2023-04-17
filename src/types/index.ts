@@ -79,3 +79,7 @@ export type childrenType = {
 export type CustomHeaderType = {
     text: string
 }
+
+export type ThemeType = {
+    theme: boolean
+}
