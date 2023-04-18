@@ -1,21 +1,13 @@
-import ImageMotion from '@/components/ImageMotion/ImageMotion'
+import NavGrid from '@/components/NavGrid/NavGrid'
 import Layout from '@/components/Templates/Layout/Layout'
-import { StyledIElement } from '@/components/StyledComponents'
 import styles from '@/styles/Profile.module.css'
 import { RegistrationType } from '@/types'
-import { Avatar, Button, CircularProgress, Grid, Paper, Typography } from '@mui/material'
-import { Stack } from '@mui/system'
+import { Avatar, CircularProgress, Grid, Paper, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
-import axios from 'axios'
-import cookie from 'cookie'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import Swal from 'sweetalert2'
-import TwoPeople from '../../assets/twopeople.png'
-import NavGrid from '@/components/NavGrid/NavGrid'
 
 const NavigationComponent = dynamic(
     () => import('@/components/Navigation/Navigation'), { loading: () => <CircularProgress /> }
@@ -23,6 +15,7 @@ const NavigationComponent = dynamic(
 const inter = Inter({ subsets: ['latin'] })
 
 const Profile = (props: { data: RegistrationType, user: { name: string, email: string, image: string | null, id: number }, expires: any }) => {
+
     const { data, user } = props
     const [showComponent, setShowComponent] = useState<boolean>(true);
     const { data: session } = useSession()
@@ -51,7 +44,7 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
                             </Grid>
                             <Grid item>
                                 <Grid container alignItems="center" spacing={2}>
-                                    <Grid item md={6} xs={12}>
+                                    <Grid item>
                                         <Grid container spacing={2} direction="column">
                                             <Grid item className={styles.avatar}>
                                                 <Avatar src={session.user?.image !== null ? session.user?.image : ''} sx={{ width: 56, height: 56 }} imgProps={{ referrerPolicy: 'no-referrer' }} />
@@ -66,16 +59,6 @@ const Profile = (props: { data: RegistrationType, user: { name: string, email: s
                                                 <strong>Profile ID:</strong> {user ? data ? data.id : user.id : ""}
                                             </Grid>
                                         </Grid>
-                                    </Grid>
-                                    <Grid item md={6} xs={12} sx={{ textAlign: "center" }}>
-                                        <ImageMotion>
-                                            <Image src={TwoPeople} alt="static image" height={200} />
-                                        </ImageMotion>
-                                    </Grid>
-                                    <Grid item>
-                                        <StyledIElement className={styles.font}>
-                                            <a href="https://www.freepik.com/free-vector/back-back-concept-illustration_13850246.htm#query=employee&position=4&from_view=keyword&track=sph">Image by storyset</a> on Freepik
-                                        </StyledIElement>
                                     </Grid>
                                 </Grid>
                             </Grid>

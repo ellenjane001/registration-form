@@ -1,7 +1,7 @@
 import ImageMotion from '@/components/ImageMotion/ImageMotion'
 import LoginAndRegisterButton from '@/components/LoginAndRegister/CustomButtonGroup'
 import NavGrid from '@/components/NavGrid/NavGrid'
-import { StyledIElement } from '@/components/StyledComponents'
+import { StyledIElement, StyledImage } from '@/components/StyledComponents'
 import Layout from '@/components/Templates/Layout/Layout'
 import { CircularProgress, Grid, Skeleton } from '@mui/material'
 import axios from 'axios'
@@ -31,7 +31,8 @@ export default function Home({ content }: { content: string }): JSX.Element {
       </NavGrid>
       <Grid item md={12}>
         <ImageMotion>
-          <Image src={People} alt="hero" priority style={{ objectFit: "contain", width: "100%", height: "auto" }} />
+          <StyledImage src={People} alt="hero" priority />
+          {/* <Image src={People} alt="hero" priority style={{ objectFit: "contain", width: "100%", height: "auto" }} /> */}
         </ImageMotion>
       </Grid>
       <Grid item>

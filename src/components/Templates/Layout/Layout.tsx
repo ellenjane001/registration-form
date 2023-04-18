@@ -5,7 +5,6 @@ import React from 'react'
 import Header from '../Header/Header'
 
 interface LayoutProps {
-    title?: string
     children?: any
 }
 

@@ -1,10 +1,9 @@
 import NavGrid from '@/components/NavGrid/NavGrid'
 import Navigation from '@/components/Navigation/Navigation'
-import { StyledDiv, StyledTableRow } from '@/components/StyledComponents'
+import { StyledTableWrapperDiv } from '@/components/StyledComponents'
 import Layout from '@/components/Templates/Layout/Layout'
-import TableCustom from '@/components/Templates/Table/TableCustom'
 import { RegistrationType } from '@/types'
-import { Grid, TableCell } from '@mui/material'
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import axios from 'axios'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
@@ -14,28 +13,21 @@ type UsersPropsType = {
 }
 
 const users = (props: UsersPropsType) => {
+  const rows: GridRowsProp = props.users.map((user, i) => ({ id: i + 1, userId: user.id, username: user.username }))
+
+  const columns: GridColDef[] = [
+    { field: 'userId', headerName: 'ID', width: 100 },
+    { field: 'username', headerName: 'Username', width: 225 },
+  ];
   return (
     <Layout>
       <NavGrid>
         <Navigation active='users' id={props.user.id} />
       </NavGrid>
-      <Grid item md={12} xs={12}>
-        <Grid container justifyContent="center" sx={{ padding: '20px' }}>
-          <Grid item>
-            <TableCustom>
-              {props.users.map(user => (
-                <StyledTableRow key={user.id}>
-                  <StyledDiv component="th" scope="row">
-                    {user.id}
-                  </StyledDiv>
-                  <TableCell>{user.username}</TableCell>
-                </StyledTableRow>
-              ))}
-            </TableCustom>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Layout>
+      <StyledTableWrapperDiv>
+        <DataGrid rows={rows} columns={columns} />
+      </StyledTableWrapperDiv>
+    </Layout >
   )
 }
 
