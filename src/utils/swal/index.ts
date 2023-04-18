@@ -59,3 +59,19 @@ export const swalLogout = ({ theme }: ThemeType) => {
             }
         }))
 }
+
+const swalRegistrationSuccess = ({ theme }: ThemeType) => {
+    return (
+        Swal.fire({
+            icon: 'success',
+            title: 'Congratulations',
+            text: 'User has been successfully registered',
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+                popup: theme ? 'dark-theme' : '',
+            }
+        }))
+}
+
+export {swalRegistrationSuccess}

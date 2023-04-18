@@ -1,3 +1,5 @@
+import useAppStore from '@/utils/AppStore'
+import { swalRegistrationSuccess, swalWithErrorIcon } from '@/utils/swal'
 import { Button, ButtonGroup, CircularProgress, FormControl, FormHelperText, Grid, Link, Stack, Typography } from '@mui/material'
 import { Inter } from '@next/font/google'
 import axios from 'axios'
@@ -5,10 +7,8 @@ import { useFormik } from 'formik'
 import { signIn } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import Swal from 'sweetalert2'
 import { RegistrationSchema } from '../../Schema/index'
 import { RegistrationType } from '../../types/index'
-import Error from '../Error/Error'
 import FormItem from '../FormItem/FormItem'
 import GridItemWithPassword from '../GridItemWithPassword/GridItemWithPassword'
 import GridWithFormControl from '../GridWithFormControl/'
@@ -22,6 +22,7 @@ const inter = Inter({ subsets: ['latin'] })
 const StyledPaperComponent = dynamic(() => import('@/components/StyledComponents').then(index => index.StyledPaper2), { loading: () => <CircularProgress /> })
 
 const RegistrationComponent = (): JSX.Element => {
+  const theme = useAppStore<boolean>(state => state.theme)
   const initialValues = {
     username: '',
     password: '',
@@ -44,21 +45,15 @@ const RegistrationComponent = (): JSX.Element => {
     onSubmit: values => {
       const fetchAPI = async (values: RegistrationType) => {
         try {
-          axios.post('api/users/register', { ...values }).then((response) => {
-            if (response.status === 200) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Congratulations',
-                text: 'User has been successfully registered',
-                showConfirmButton: false,
-                timer: 1500
-              })
-              formik.resetForm()
-              router.push('/')
-            }
-          });
+          let response = await axios.post('api/users/register', { ...values })
+          if (response.status === 200) {
+            swalRegistrationSuccess({theme})
+            formik.resetForm()
+            router.push('/')
+          }
         } catch (e: any) {
           console.error(e.message)
+          swalWithErrorIcon({ message: "Bad Request! Please enter different credentials", theme: theme })
         }
       }
       fetchAPI(values)
