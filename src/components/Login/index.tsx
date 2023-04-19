@@ -111,6 +111,9 @@ const Login = (): JSX.Element => {
                                 onClick={() => signIn('google', { redirect: false })}
                             />
                         </Grid>
+                        <Grid item>
+                            <Button variant="contained" onClick={() => signIn('keycloak', { redirect: false })}>Keycloak</Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
